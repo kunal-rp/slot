@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poll-bazelgrpc
+  namespace: bazelgrpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: poll-bazelgrpc
+  template:
+    metadata:
+      labels:
+        app: poll-bazelgrpc
+    spec:
+      containers:
+        - name: poll-bazelgrpc
+          image: 534378753229.dkr.ecr.us-east-2.amazonaws.com/poll-bazeldemo:dev
+          ports:
+            - containerPort: 80

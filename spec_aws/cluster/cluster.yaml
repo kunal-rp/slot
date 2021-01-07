@@ -1,0 +1,29 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: bg-7-cluster
+  region: us-east-2
+
+vpc:
+  id: vpc-08d7e59d7f0b525c1
+  cidr: "192.168.0.0/16"
+  subnets:
+    public:
+      us-east-2a:
+        id: subnet-0ec83d41c7fe8b3db
+      us-east-2b:
+        id: subnet-06cd57bff74e6fbca
+    private:
+      us-east-2a:
+        id: subnet-09483049052d2ca8f
+      us-east-2b:
+        id: subnet-017a0882adc9611bc
+
+nodeGroups:
+  - name: EKS-private-workers
+    instanceType: t2.medium
+    desiredCapacity: 1
+    privateNetworking: true
+  - name: EKS-public-workers
+    instanceType: t2.medium
+    desiredCapacity: 1

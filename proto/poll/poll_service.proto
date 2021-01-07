@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package poll;
+
+option java_package = "com.bazelgrpc.demo.poll";
+option java_outer_classname = "PollServiceProto";
+
+import 'proto/poll/poll.proto';
+
+service PollManagement {
+
+  rpc getPolls(GetPollRequest) returns (GetPollResponse);
+}
+
+message GetPollRequest {
+    int32 poll_id = 1;
+}
+
+message GetPollResponse{
+
+	repeated Poll polls = 1;
+}

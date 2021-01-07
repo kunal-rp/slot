@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: action-bazelgrpc
+  namespace: bazelgrpc
+spec:
+  selector:
+    app: action-bazelgrpc
+  ports:
+    - protocol: "TCP"
+      port: 80
+      targetPort: 80
