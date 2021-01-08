@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package task;
+
+option java_package = "com.task";
+option java_outer_classname = "TaskProto";
+
+message Task {
+    int32 task_id = 1;
+    int64 creation_timestamp = 2;
+
+    int32 parent_project_id = 3;
+
+    oneof task_detail {
+        TodoTask todo = 3;
+        ReminderTask reminder = 4;
+        ReoccuringTask reoccuring = 5;
+    }
+}
+
+
+message TodoTask {
+    string 
+}
+
+message ReminderTask {
+
+}
+
+message ReoccuringTask {
+
+}
