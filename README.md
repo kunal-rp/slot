@@ -7,6 +7,9 @@ Time Bloc Managment
 - force completion/closing of previous day's task
 - easy to indicate task in progress and schedule time later to complete
 
+**The Main purpose is keepting track of tasks, collection of basic data per task, and allocating time**
+No linking for Google Calendars for now 
+
 
 ## Task : Single item of work 
 
@@ -52,6 +55,24 @@ Project Parts:
 
 **Prioritiy over tying loose ends on past tasks**
 Flow should activley check to ensure past tasks go through completion flow, regarless of finished or pending, before entertaining new task creation. Regartless of task type, project, time type; if a task is created in the past that hasn't gone through completion, stop everything and force user to do it.Again, this is to ensure accurate logging of tasks.
+
+Assuming there are no outstanding tyding up, the different ways to add a task at a particular time:
+
+New One Time Task : 
+- Create new task , fill all parts
+- At the end , fill out data and mark completion
+
+Pending -> Working Task:
+- Update task w/ time type
+- At the end, fill out data dn mark completion
+
+## Schedule Modification
+
+Flexibility in altering the immediate schedule is imparative. Per interval, backend will generate task entries per templates for tasks that are in immediate timeslot, denoting the supposed start time and duration for each.
+
+This will allow for ability to create new tasks immediatly and add to schedule while altering start time/duration of task with ease.
+
+This would mean that only tasks in the immediate timeslot would be alterable/completable. 
 
 
 # Server Driven UI 
