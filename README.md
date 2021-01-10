@@ -37,8 +37,9 @@ Reoccuring Patterns:
     * everday, at X time, call someone new
 
 Completion: 
+- Pending: Task is not completed
 - Finished: Single item of Work is finished
-- Pending : Work left to do for task 
+- Incomplete : Work left to do for task 
     * This will mark the current task as finished & create a new task w/ origional as parent
 
 
@@ -68,11 +69,11 @@ Pending -> Working Task:
 
 ## Schedule Modification
 
-Flexibility in altering the immediate schedule is imparative. Per interval, backend will generate task entries per templates for tasks that are in immediate timeslot, denoting the supposed start time and duration for each.
+Flexibility in altering the immediate schedule is imparative. Per interval enon job, backend will generate task entries per templates for tasks that are in immediate timeslot, denoting the supposed start time and duration for each.
 
 This will allow for ability to create new tasks immediatly and add to schedule while altering start time/duration of task with ease.
 
-This would mean that only tasks in the immediate timeslot would be alterable/completable. 
+For tasks that are in the future beyone time slot, task entry will be created w/ alterations. 
 
 
 # Server Driven UI 

@@ -5,28 +5,100 @@ package task;
 option java_package = "com.task";
 option java_outer_classname = "TaskProto";
 
-message Task {
-    int32 task_id = 1;
-    int64 creation_timestamp = 2;
 
-    int32 parent_project_id = 3;
+message TaskTemplate {
+    int32 template_id = 1;
 
-    oneof task_detail {
-        TodoTask todo = 3;
-        ReminderTask reminder = 4;
-        ReoccuringTask reoccuring = 5;
+    // Duration for task in minutes ( lowest possible value is 5 min)
+    int32 duration = 2;
+
+    TaskDetails details = 3;
+
+    // optional project id 
+    int32 parent_project_id = 4;
+
+    // Time policy to generate occurances for task entries 
+    TimePolicy time_configuration = 5;
+
+    // Data collection for Task 
+    repeated DataCollectionPolicy data_collection_configuration = 6;
+
+}
+
+message TaskEntry {
+    int32 entry_id = 1;
+    // Template that entry is based off of 
+    int32 template_id = 2;
+
+    TaskDetails details = 3;
+
+    int64 start_timestamp = 4;
+    int32 duration = 5;
+
+    // for entries created from rollover
+    int32 parent_entry = 6;
+
+    // for reoccuring tasks, store what occurance number of task this is
+    int32 occurance = 7;
+
+    // Alterations to time for specific entry, would be set by user ( usually when altering schedule)
+    TimeAlteractionPolicy time_alterations = 8;
+
+    // Entry could have additional collection bedyond template specified depending on projects its assigned to
+    repeated DataCollectionPolicy data_collection_configuration = 9;
+
+    enum TaskStatus {
+        IN_PROGRESS = 0;
+        FINISHED = 1;
+        INCOMPLETE = 2;
+    }
+    TaskStatus status = 10; 
+
+}
+
+message TaskDetails { 
+    string title = 1;
+    string description = 2;
+}
+
+message TimePolicy {
+    oneof time_type {
+        // One Time : specify single start time 
+        int64 start_timestamp = 1;
+        //Reoccuring 
+        RecurringTime recurring_time = 2;
     }
 }
 
+message RecurringTime {
+    // Timestamp indicating when to start creating tasks
+    int64 start_timestamp = 1;
+    // Interval indicating the start times for each task entry 
+    int64 interval_seconds = 2;
 
-message TodoTask {
-    string 
+    // Timestamp indicating max possible timestamp to create entries 
+    // If null, create tasks indefinently
+    int64 end_timestamp = 3;
+
+
+    //TODO : restrictions to allow control based on hour/day/week/month
 }
 
-message ReminderTask {
+message DataCollectionPolicy {
 
+    // Key to store data value with for task entry
+    string key = 1;
+
+    string prompt = 2; 
+    enum CollectionType {
+        MARKDOWN = 0;
+        BOOLEAN = 1;
+        INT = 2;
+    }
+    CollectionType collection_type = 3;
 }
 
-message ReoccuringTask {
-
+message TimeAlteractionPolicy{
+    int64 start_time_surplus = 1;
+    int64 duration_surplus = 2;
 }

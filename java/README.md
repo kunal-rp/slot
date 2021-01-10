@@ -12,30 +12,24 @@ Task Templates are stored w/ information about what task details are; what is du
 
 Per day(or time interval), a cron job will parse and run said templates to generate the tasks that were made to be due in the next 12 hours, call this the timeslot, for modifications; creating them, inputting them in entries db, and marking them as due/not-completed.To determine tasks that must immediatly go through completion flow, just need to parse for non completed tasks w/ start times in the past.
 
-**The assumption can then be made that all tasks within timezone are editable 
 
 Task Entry ID Generation : 
 - One Time Task : same as template id
 - Reoccuring Task : template_id.ORIGIONAL_START_TIME
 
-Altering Timings of Task:
-- One Time : 
-    * alter the template
-    * delete all entries w/ same template id, recreate
-- Reoccuring, Altering single occurance : 
-    * get the original start time of single occurance of task 
-    * get corresponding
+Altering Timings/Data of Task:
+    * get the original start time said task 
+    * get corresponding task by template id and originoal start time
+    * update values
 
-Upon user completed a task and inputting data would either: 
-- updating the existing task entry w/ flag and data
-- create a new entry w/ flag and data
+Upon user completed a task and inputting data would updating the existing task entry w/ flag and data. 
 
 
 ## DB's
 
 There will be two db's for tasks, Templates and Entries. 
 
-Task Templates( one to one): 
+Task Templates: 
 - template_id : int
 - creation time : int ( unix)
 - title : string
@@ -55,13 +49,20 @@ Task Data Collection ( one to many):
 Task Entry: 
 - task_id : int
 - template_id : int
-- origional_start_time : int (unix)
 - start_time : int (unix)
 - duration : int
+- start_time_alterations :
+- duration_alterations : int
 - completed : boolean
 - json_data : string
 
 json_data would be stringified values inputted by user matching ones set per templates in Task Data DB.
+
+origional_start_time will be immutable after initial creation, start time is mutable per user altering schedule
+
+
+post completion of entry for one time tasks, linked task template and data collection entries should be deleted 
+
 
 
 
