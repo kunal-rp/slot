@@ -35,8 +35,8 @@ public class SampleTasksUtil {
                 TimePolicy.newBuilder()
                     .setRecurringTime(
                         RecurringTime.newBuilder() 
-                            .setStartTimestamp(10) //01/17/2021 @ 7:00pm
-                            .setIntervalSeconds(6) // 1 day
+                            .setStartTimestamp(7) 
+                            .setIntervalSeconds(6) 
                         .build())
                     .build())
             .addDataCollectionConfiguration(
@@ -46,6 +46,7 @@ public class SampleTasksUtil {
                     .setCollectionType(DataCollectionPolicy.CollectionType.INT)
                     .build())
             .build();
+
 }
 
 

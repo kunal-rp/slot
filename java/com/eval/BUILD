@@ -4,8 +4,8 @@ package(default_visibility = ["//visibility:public"])
 
 
 java_library(
-    name = "schedule_handler",
-    srcs = ["ScheduleHandler.java"],
+    name = "generative_schedule_util",
+    srcs = ["GenerativeScheduleUtil.java"],
     deps = [
          "//proto/task:task_java_proto",
         "//java/com/task:sample_tasks_util",
@@ -16,7 +16,9 @@ java_binary(
     name = "test_eval_server",
     srcs = ["TestEvalServer.java"],
     deps = [
-    ":schedule_handler"
+        ":generative_schedule_util",
+        "//proto/task:task_java_proto",
+        "//java/com/task:sample_tasks_util",
     ],
     main_class = "com.eval.TestEvalServer"
 )
