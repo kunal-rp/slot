@@ -1,4 +1,4 @@
-package com.eval;
+package com.template;
 
 import static org.junit.Assert.assertEquals;
 
@@ -8,7 +8,7 @@ import java.util.List;
 import com.task.TaskProto.TaskTemplate;
 import com.task.TaskProto.TaskEntry;
 import com.google.common.collect.Iterables;
-import com.eval.GenerativeScheduleUtil;
+import com.template.GenerativeScheduleUtil;
 import com.task.SampleTasksUtil;
 
 /**
