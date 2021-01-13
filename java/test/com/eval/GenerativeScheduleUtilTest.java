@@ -84,6 +84,20 @@ public class GenerativeScheduleUtilTest {
 
     }
 
+     @Test
+    public void shouldGenerateReccuringEntry_thatStartsBeforeAndEndsDuringSlot() throws Exception {
+        
+        ArrayList<TaskTemplate> templates = new ArrayList() {{
+            add(SampleTasksUtil.RECURRING_DAILY_MEETING_TEMPLATE); // start time : 7, interval: 6, duration: 2
+        }};
+
+        TaskEntry entry = Iterables.getOnlyElement(scheduleUtil.generateSchedule(templates,8, 9));
+
+        // there is 
+        assertEquals(entry.getStartTimestamp(), 7);
+
+    }
+
 
 
     @Test

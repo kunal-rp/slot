@@ -59,11 +59,17 @@ public class GenerativeScheduleUtil {
     }
 
     private int calculateFirstOccurance(int scheduleStartTimestamp, TaskTemplate template){
-        return (int) Math.ceil(
+        int firstOcc =  (int) Math.ceil(
             (scheduleStartTimestamp - template.getTimeConfiguration().getRecurringTime().getStartTimestamp()) /
                 (double) template.getTimeConfiguration().getRecurringTime().getIntervalSeconds())
             + ((scheduleStartTimestamp - template.getTimeConfiguration().getRecurringTime().getStartTimestamp()) %
              template.getTimeConfiguration().getRecurringTime().getIntervalSeconds() == 0 ? 0 : 1);
+
+        // iff the calcualted first occurance(CFO) is not the beginning one for template,
+        // & the end timne of the CFO -1 occurs after the start time of the slot , 
+        // return CFO - 1
+        return (firstOcc > 1 && template.getTimeConfiguration().getRecurringTime().getStartTimestamp() + ((firstOcc - 1) * template.getTimeConfiguration().getRecurringTime().getIntervalSeconds()) + template.getDuration() > scheduleStartTimestamp ? firstOcc - 1 : firstOcc  );
+
     }
 
      private int calculateLastOccurance(int scheduleEndTimestamp, TaskTemplate template){
