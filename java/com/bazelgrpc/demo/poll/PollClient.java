@@ -11,8 +11,11 @@ public class PollClient {
     public GetPollResponse callGetPoll() {
         PollManagementGrpc.PollManagementBlockingStub blockingStub =
                 PollManagementGrpc.newBlockingStub(ManagedChannelBuilder
-                        .forTarget(SetupUtil.getTarget(SetupUtil.AvailableServices.POLL_BAZELGRPC))
-                        .usePlaintext().build());
+                        .forTarget(
+                        	SetupUtil.getTarget(
+                        		SetupUtil.AvailableServices.POLL_BAZELGRPC))
+                        .usePlaintext().build()
+                    );
         return blockingStub.getPolls(GetPollRequest.getDefaultInstance());
     }
 }

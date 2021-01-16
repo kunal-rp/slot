@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package template;
+
+option java_package = "com.template";
+option java_outer_classname = "TemplateServiceProto";
+
+import 'proto/task/task.proto';
+
+service TemplateService {
+
+  rpc generateScheduleFromTemplates(GenerateScheduleRequest) returns (GenerateScheduleResponse);
+}
+
+message GenerateScheduleRequest {
+    int64 schedule_start_unix = 1;
+    int64 schedule_end_unix = 2;
+}
+
+message GenerateScheduleResponse{
+	repeated task.TaskEntry generated_task_entries = 1;
+}

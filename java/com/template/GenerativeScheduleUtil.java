@@ -65,10 +65,13 @@ public class GenerativeScheduleUtil {
             + ((scheduleStartTimestamp - template.getTimeConfiguration().getRecurringTime().getStartTimestamp()) %
              template.getTimeConfiguration().getRecurringTime().getIntervalSeconds() == 0 ? 0 : 1);
 
+            System.out.println("calculateFirstOccurance");
+            System.out.println(firstOcc);
+
         // iff the calcualted first occurance(CFO) is not the beginning one for template,
         // & the end timne of the CFO -1 occurs after the start time of the slot , 
         // return CFO - 1
-        return (firstOcc > 1 && template.getTimeConfiguration().getRecurringTime().getStartTimestamp() + ((firstOcc - 1) * template.getTimeConfiguration().getRecurringTime().getIntervalSeconds()) + template.getDuration() > scheduleStartTimestamp ? firstOcc - 1 : firstOcc  );
+        return (firstOcc > 0 && template.getTimeConfiguration().getRecurringTime().getStartTimestamp() + ((firstOcc - 1) * template.getTimeConfiguration().getRecurringTime().getIntervalSeconds()) + template.getDuration() > scheduleStartTimestamp ? firstOcc - 1 : firstOcc  );
 
     }
 
@@ -96,9 +99,9 @@ public class GenerativeScheduleUtil {
             TaskEntry entry = generateTimeEntry(taskTemplate);
 
             // will need to -1 to occurance b/c when calculating the first/last occurance, the first ever event is labeled as 1 & it occurs before the first interval
-            long startTime = taskTemplate.getTimeConfiguration().getRecurringTime().getStartTimestamp() + taskTemplate.getTimeConfiguration().getRecurringTime().getIntervalSeconds() * (occurance -1);
+            long startTime = taskTemplate.getTimeConfiguration().getRecurringTime().getStartTimestamp() + taskTemplate.getTimeConfiguration().getRecurringTime().getIntervalSeconds() * (occurance);
             //update entry start time based on occurance number
-            resultingEntries.add(entry.toBuilder().setStartTimestamp(startTime).setOccurance(occurance).build());
+            resultingEntries.add(entry.toBuilder().setStartTimestamp(startTime).setOccurance(occurance + 1).build());
         }
         return resultingEntries;
     }

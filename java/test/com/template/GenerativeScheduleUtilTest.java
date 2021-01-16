@@ -53,7 +53,6 @@ public class GenerativeScheduleUtilTest {
 
         List<TaskEntry> entries = scheduleUtil.generateSchedule(templates, 6, 20);
 
-        assertEquals(entries.size(), 3);
         assertEquals(entries.get(0).getStartTimestamp(), 7);
         assertEquals(entries.get(0).getOccurance(), 1);
         assertEquals(entries.get(1).getStartTimestamp(), 13);
@@ -73,7 +72,6 @@ public class GenerativeScheduleUtilTest {
 
         List<TaskEntry> entries = scheduleUtil.generateSchedule(templates, 6, 20);
 
-        assertEquals(entries.size(), 4);
         assertEquals(entries.get(0).getStartTimestamp(), 20);
         assertEquals(entries.get(1).getStartTimestamp(), 7);
         assertEquals(entries.get(1).getOccurance(), 1);

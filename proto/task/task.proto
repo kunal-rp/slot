@@ -9,7 +9,7 @@ option java_outer_classname = "TaskProto";
 message TaskTemplate {
     int32 template_id = 1;
 
-    // Duration for task in minutes ( lowest possible value is 5 min)
+    // Duration for task in seconds
     int32 duration = 2;
 
     TaskDetails details = 3;
@@ -94,8 +94,14 @@ message DataCollectionPolicy {
         MARKDOWN = 0;
         BOOLEAN = 1;
         INT = 2;
+        // TODO: allow for radio selection w/ harcoded values
     }
     CollectionType collection_type = 3;
+
+    // TODO: predicate to allow for conditional show based on input from other values
+    // i.e. - workout project will have DC asking for workout_type ; Push , Pull, Leg, other
+    //      - create daily task for workout @ 7; iff workout_type == Push, ask for total pushups
+
 }
 
 message TimeAlteractionPolicy{
