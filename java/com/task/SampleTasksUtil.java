@@ -84,7 +84,7 @@ public class SampleTasksUtil {
             .setDuration(4200) // 70 min
             .setDetails(TaskDetails.newBuilder()
                 .setTitle("Workout")
-                .setDescription(" Call someone from family/friends")
+                .setDescription("Daily exercise lets get it")
                 .build())
             .setTimeConfiguration(
                 TimePolicy.newBuilder()
@@ -127,9 +127,9 @@ public class SampleTasksUtil {
             .build();
 
     public static List<TaskTemplate> PROD_TEMPLATES = new ArrayList<TaskTemplate>(){{
-        //add(PROD_DAILY_CALLING_TEMPLATE);
+        add(PROD_DAILY_CALLING_TEMPLATE);
         add(PROD_MONTHLY_INVEST_TEMPLATE);
-        //add(PROD_DAILY_WORKOUT_TEMPLATE);
+        add(PROD_DAILY_WORKOUT_TEMPLATE);
     }};
 
 }

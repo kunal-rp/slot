@@ -19,7 +19,7 @@ public class TemplateClient {
         GenerateScheduleResponse response =
                 blockingStub.generateScheduleFromTemplates(
                 	GenerateScheduleRequest.newBuilder()
-                    .setScheduleStartUnix(1610308800)
+                    .setScheduleStartUnix(1610240520)
                     .setScheduleEndUnix(1610388800)
                     .build());
         System.out.println(response.getGeneratedTaskEntriesList());
