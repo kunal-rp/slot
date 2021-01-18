@@ -37,7 +37,7 @@ java_library(
     srcs = ["MainTemplateHandler.java"],
     deps = [
        "//proto/template:template_service_java_proto",
-       "//java/com/bazelgrpc/demo/util:setup-util",
+       "//java/com/util:setup-util",
     ],
 )
 
@@ -68,7 +68,7 @@ java_image(
      srcs = ["TemplateService.java"],
      deps = [
         ":template_service_impl",
-        "//java/com/bazelgrpc/demo/util:setup-util",
+        "//java/com/util:setup-util",
         "@io_grpc_grpc_java//api",
      ],
     main_class = "com.template.TemplateService",

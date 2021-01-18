@@ -6,18 +6,12 @@ load("@io_bazel_rules_docker//nodejs:image.bzl", "nodejs_image")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image","container_push")
 load("//ci:service_configs.bzl","GATEWAY_REPO","ECR_URL")
 
-nodejs_grpc_library(
-    name = "action_service_nodejs_proto",
-    deps = ["//proto/action:action_service_proto"]
-)
-
 nodejs_binary(
     name = "gateway_server",
     entry_point = "gateway.js",
      data = [
       "@nodejs_modules//express",
       "@nodejs_modules//@grpc/grpc-js",
-      ":action_service_nodejs_proto"
     ]
 )
 
@@ -27,7 +21,6 @@ nodejs_image(
      data = [
       "@nodejs_modules//express",
       "@nodejs_modules//@grpc/grpc-js",
-      ":action_service_nodejs_proto"
     ]
 )
 

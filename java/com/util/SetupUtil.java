@@ -16,16 +16,13 @@ public class SetupUtil {
 
     // All availabe services
     public enum AvailableServices {
-        POLL_BAZELGRPC, 
         TEMPLATE
     }
 
     public static String getTarget(AvailableServices service) {
         switch (service) {
-            case POLL_BAZELGRPC:
-                return "poll-bazelgrpc";
             case TEMPLATE:
-                return "template-service";
+                return "template";
         }
         return "someurl";
     }

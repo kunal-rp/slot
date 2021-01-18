@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gateway-bazelgrpc
-  namespace: bazelgrpc
+  name: gateway
+  namespace: slot
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: gateway-bazelgrpc
+      app: gateway
   template:
     metadata:
       labels:
-        app: gateway-bazelgrpc
+        app: gateway
     spec:
       containers:
-        - name: gateway-bazelgrpc
-          image: 534378753229.dkr.ecr.us-east-2.amazonaws.com/gateway-bazeldemo:dev
+        - name: gateway
+          image: gateway_image
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
