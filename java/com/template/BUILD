@@ -24,15 +24,44 @@ java_library(
     ],
 )
 
-java_binary(
-    name = "template_client",
-    srcs = ["TemplateClient.java"],
+java_library(
+    name = "template_handler",
+    srcs = ["TemplateHandler.java"],
     deps = [
        "//proto/template:template_service_java_proto",
-        "//java/com/bazelgrpc/demo/util:setup-util",
     ],
-    main_class = "com.template.TemplateClient"
 )
+
+java_library(
+    name = "main_template_handler",
+    srcs = ["MainTemplateHandler.java"],
+    deps = [
+       "//proto/template:template_service_java_proto",
+       "//java/com/bazelgrpc/demo/util:setup-util",
+    ],
+)
+
+
+java_library(
+    name = "fake_template_handler",
+    srcs = ["FakeTemplateHandler.java"],
+    deps = [
+       "//proto/template:template_service_java_proto",
+    ],
+)
+
+java_binary(
+    name = "test_template_handler",
+    srcs = ["TestTemplateHandler.java"],
+    deps = [
+        ":main_template_handler",
+        "//proto/template:template_service_java_proto",
+    ],
+    main_class = "com.template.TestTemplateHandler"
+)
+
+
+
 
 java_image(
     name = "template_java_image",
