@@ -1,0 +1,19 @@
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /Users/kunal/.minikube/ca.crt
+    server: https://127.0.0.1:55000
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+preferences: {}
+users:
+- name: minikube
+  user:
+    client-certificate: /Users/kunal/.minikube/profiles/minikube/client.crt
+    client-key: /Users/kunal/.minikube/profiles/minikube/client.key

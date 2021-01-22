@@ -1,0 +1,1 @@
+once an cluster is created, you will need to expose the node port detailed in the gateway on the security group for the public worker nodes; in this case , 30000 

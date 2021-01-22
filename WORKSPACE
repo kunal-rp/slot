@@ -4,8 +4,7 @@ workspace(name = "demo_proto_and_java" ,
     managed_directories = {"@nodejs_modules": ["node_modules"]})
 
 # functions to get external libs
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive","http_jar")
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 # Bazel Basic java - jdk and toolchain 
 http_archive(
@@ -142,10 +141,3 @@ k8s_repositories()
 load("@io_bazel_rules_k8s//k8s:k8s_go_deps.bzl", k8s_go_deps = "deps")
 
 k8s_go_deps()
-
-load("@io_bazel_rules_k8s//k8s:k8s.bzl", "k8s_defaults")
-
-k8s_defaults( 
-  name = "k8s_deploy",
-  cluster = "bg-7-cluster",
-)
