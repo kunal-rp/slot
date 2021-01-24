@@ -2,7 +2,7 @@ apiVersion: v1
 clusters:
 - cluster:
     certificate-authority: /Users/kunal/.minikube/ca.crt
-    server: https://127.0.0.1:55000
+    server: https://127.0.0.1:55012
   name: minikube
 contexts:
 - context:

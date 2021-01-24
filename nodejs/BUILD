@@ -11,15 +11,6 @@ nodejs_grpc_library(
     deps = ["//proto/template:template_service_proto"],
 )
 
-nodejs_binary(
-    name = "gateway_server",
-    entry_point = "gateway.js",
-     data = [
-      "@nodejs_modules//express",
-      "@nodejs_modules//@grpc/grpc-js",
-      ":template_nodejs_proto"
-    ]
-)
 
 nodejs_image(
     name = "nodejs_gateway_image",
@@ -28,7 +19,7 @@ nodejs_image(
       "@nodejs_modules//express",
       "@nodejs_modules//@grpc/grpc-js",
       ":template_nodejs_proto"
-    ]
+    ],
 )
 
 # create container image

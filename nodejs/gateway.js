@@ -8,7 +8,7 @@ const port = 3000
 const templateServiceProto = require('./template_nodejs_proto_pb/proto/template/template_grpc_pb.js')
 const templateProto = require('./template_nodejs_proto_pb/proto/template/template_pb.js')
 
-var client = new templateServiceProto.TemplateServiceClient("template", grpc.credentials.createInsecure()); 
+var client = new templateServiceProto.TemplateServiceClient("template:80", grpc.credentials.createInsecure()); 
 
 app.get('/', (req, res) => {
   console.log("generic rest  recieved")

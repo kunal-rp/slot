@@ -7,9 +7,8 @@ k8s_object(
   kubeconfig = ":config",
   cluster = "minikube",
   template = ":deployment_gateway.yaml",
-  args = ["--platforms @build_bazel_rules_nodejs//toolchains/node:linux_amd64"],
   images = {
-      "krpdkr/slot_gateway": "//nodejs:gateway_image"
+      "krpdkr/slot_gateway": "//nodejs:nodejs_gateway_image"
   },
 )
 
@@ -68,7 +67,7 @@ k8s_objects(
     name = "k8s",
     objects = [
     ":ns_slot",
-      ":deployment",
+      ":deployment_template",
       ":services",
     ]
 )

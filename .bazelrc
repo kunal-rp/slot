@@ -1,0 +1,2 @@
+build --incompatible_restrict_string_escapes=false
+query --incompatible_restrict_string_escapes=false
