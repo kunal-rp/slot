@@ -7,7 +7,7 @@ import com.task.TaskServiceProto.GenerateScheduleRequest;
 import com.task.TaskServiceProto.GenerateScheduleResponse;
 
 /* Prod implementation of Task Service Handler  */ 
-public class MainTaskHandler {
+public class MainTaskHandler implements TaskHandler {
 
 	TaskServiceGrpc.TaskServiceBlockingStub blockingStub =
                 TaskServiceGrpc.newBlockingStub(

@@ -1,4 +1,4 @@
-package com.template;
+package com.task.template;
 
 import com.task.TaskProto.TaskTemplate;
 import com.task.TaskProto.TaskEntry;

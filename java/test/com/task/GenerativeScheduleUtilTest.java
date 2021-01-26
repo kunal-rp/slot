@@ -8,7 +8,7 @@ import java.util.List;
 import com.task.TaskProto.TaskTemplate;
 import com.task.TaskProto.TaskEntry;
 import com.google.common.collect.Iterables;
-import com.template.GenerativeScheduleUtil;
+import com.task.template.GenerativeScheduleUtil;
 import com.task.SampleTasksUtil;
 
 /**

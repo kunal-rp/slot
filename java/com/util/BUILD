@@ -12,3 +12,14 @@ java_library(
         "@maven//:com_google_guava_guava",
     ],
 )
+
+java_library(
+    name = "service_module",
+    srcs = ["ServiceModule.java"],
+    deps = [
+    	"@maven//:com_google_inject_guice",
+        "@maven//:com_google_guava_guava",
+        "//java/com/task/db:task_db_handler",
+        "//java/com/task/db:main_task_db_handler"
+    ],
+)
