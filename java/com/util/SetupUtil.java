@@ -1,4 +1,4 @@
-package com.bazelgrpc.demo.util;
+package com.util;
 
 import java.security.Provider.Service;
 import java.util.Optional;
@@ -16,13 +16,13 @@ public class SetupUtil {
 
     // All availabe services
     public enum AvailableServices {
-        TEMPLATE
+        TASK
     }
 
     public static String getTarget(AvailableServices service) {
         switch (service) {
-            case TEMPLATE:
-                return "template";
+            case TASK:
+                return "task";
         }
         return "someurl";
     }

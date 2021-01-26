@@ -13,13 +13,13 @@ k8s_object(
 )
 
 k8s_object(
-  name = "deployment_template",
+  name = "deployment_task",
   kind = "deployment",
   kubeconfig = ":config",
   cluster = "minikube",
-  template = ":deployment_template.yaml",
+  template = ":deployment_task.yaml",
   images = {
-      "krpdkr/slot_template": "//java/com/template:template_java_image"
+      "krpdkr/slot_task": "//java/com/task:task_java_image"
   },
 )
 
@@ -32,8 +32,8 @@ k8s_object(
 )
 
 k8s_object(
-  name = "service_template",
-  template = ":service_template.yaml",
+  name = "service_task",
+  template = ":service_task.yaml",
   kubeconfig = ":config",
   cluster = "minikube",
   kind = "service"
@@ -51,7 +51,7 @@ k8s_objects(
     name = "deployment",
     objects = [
       ":deployment_gateway",
-      ":deployment_template",
+      ":deployment_task",
     ]
 )
 
@@ -59,7 +59,7 @@ k8s_objects(
     name = "services",
     objects = [
       ":service_gateway",
-      ":service_template",
+      ":service_task",
     ]
 )
 
@@ -67,7 +67,7 @@ k8s_objects(
     name = "k8s",
     objects = [
     ":ns_slot",
-      ":deployment_template",
+      ":deployment_task",
       ":services",
     ]
 )

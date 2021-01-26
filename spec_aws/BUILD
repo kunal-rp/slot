@@ -8,7 +8,7 @@ k8s_object(
   cluster = "arn:aws:eks:us-east-2:534378753229:cluster/bg-7-cluster",
   template = ":deployment_gateway.yaml",
   images = {
-      "gateway_image": "//nodejs:gateway_image"
+      "gateway_image": "//nodejs:nodejs_gateway_image"
   },
 )
 

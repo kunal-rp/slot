@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: template
+  name: task
   namespace: slot
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: template
+      app: task
   template:
     metadata:
       labels:
-        app: template
+        app: task
     spec:
       containers:
-        - name: template
-          image: krpdkr/slot_template
+        - name: task
+          image: krpdkr/slot_task
           ports:
             - containerPort: 80

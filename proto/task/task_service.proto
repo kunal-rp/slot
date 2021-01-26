@@ -1,15 +1,15 @@
 syntax = "proto3";
 
-package template;
+package task;
 
-option java_package = "com.template";
-option java_outer_classname = "TemplateServiceProto";
+option java_package = "com.task";
+option java_outer_classname = "TaskServiceProto";
 
 import 'proto/task/task.proto';
 
-service TemplateService {
+service TaskService {
 
-  rpc generateScheduleFromTemplates(GenerateScheduleRequest) returns (GenerateScheduleResponse);
+  rpc generateSchedule(GenerateScheduleRequest) returns (GenerateScheduleResponse);
 }
 
 message GenerateScheduleRequest {
