@@ -47,7 +47,7 @@ java_image(
         ":sample_tasks_util",
         "//proto/task:task_service_java_proto",
         "//java/com/util:setup-util",
-        "//java/com/template:generative_schedule_util",
+        "//java/com/task/template:generative_schedule_util",
      ],
     main_class = "com.task.TaskService",
 )

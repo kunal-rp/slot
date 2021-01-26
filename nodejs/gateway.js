@@ -5,8 +5,8 @@ const app = express()
 const port = 3000
 
 
-const taskServiceProto = require('./task_nodejs_proto_pb/proto/task/task_grpc_pb.js')
-const taskProto = require('./task_nodejs_proto_pb/proto/task/task_pb.js')
+const taskServiceProto = require('./task_nodejs_service_proto_pb/proto/task/task_service_grpc_pb.js')
+const taskProto = require('./task_nodejs_service_proto_pb/proto/task/task_service_pb.js')
 
 var client = new taskServiceProto.TaskServiceClient("task:80", grpc.credentials.createInsecure()); 
 

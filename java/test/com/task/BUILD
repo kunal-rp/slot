@@ -9,7 +9,7 @@ java_unit_test(
     deps = [
         "//proto/task:task_java_proto",
         "//java/com/task:sample_tasks_util",
-        "//java/com/template:generative_schedule_util"
+        "//java/com/task/template:generative_schedule_util"
     ],
 
 )
