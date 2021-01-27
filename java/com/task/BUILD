@@ -40,20 +40,30 @@ java_library(
     ],
 )
 
+java_library(
+    name = "task_service_impl",
+    srcs = ["TaskServiceImpl.java"],
+    deps = [
+        "@maven//:com_google_inject_guice",
+        "@io_grpc_grpc_java//api",        
+        ":task_handler",
+        "//proto/task:task_service_java_proto",
+        "//java/com/task/db:task_db_handler",
+        "//java/com/task/template:generative_schedule_util",
+    ],
+)
+
 
 java_image(
     name = "task_java_image",
      srcs = ["TaskService.java"],
      deps = [
         "@maven//:com_google_inject_guice",
-     	"@io_grpc_grpc_java//api",
+        "@io_grpc_grpc_java//api",
+        ":task_service_impl",
         ":sample_tasks_util",
-        ":task_handler",
-        "//proto/task:task_service_java_proto",
         "//java/com/util:service_module",
         "//java/com/util:setup-util",
-        "//java/com/task/db:task_db_handler",
-        "//java/com/task/template:generative_schedule_util",
      ],
     main_class = "com.task.TaskService",
 )

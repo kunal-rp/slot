@@ -9,7 +9,7 @@ import 'proto/task/task.proto';
 
 service TaskService {
 
-  rpc generateSchedule(GenerateScheduleRequest) returns (GenerateScheduleResponse);
+  rpc GenerateSchedule (GenerateScheduleRequest) returns (GenerateScheduleResponse);
 }
 
 message GenerateScheduleRequest {
@@ -18,5 +18,5 @@ message GenerateScheduleRequest {
 }
 
 message GenerateScheduleResponse{
-	repeated task.TaskEntry generated_task_entries = 1;
+	repeated task.TaskEntry generated_task_entry = 1;
 }

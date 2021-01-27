@@ -1,4 +1,4 @@
-package com.template;
+package com.task;
 
 import static org.junit.Assert.assertEquals;
 

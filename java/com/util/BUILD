@@ -23,3 +23,14 @@ java_library(
         "//java/com/task/db:main_task_db_handler"
     ],
 )
+
+java_library(
+    name = "fake_service_module",
+    srcs = ["FakeServiceModule.java"],
+    deps = [
+        "@maven//:com_google_inject_guice",
+        "@maven//:com_google_guava_guava",
+        "//java/com/task/db:task_db_handler",
+        "//java/com/task/db:fake_task_db_handler"
+    ],
+)

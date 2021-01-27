@@ -14,7 +14,7 @@ public class SampleTasksUtil {
     
     public static TaskTemplate ONE_TIME_MEETING_TEMPLATE = 
         TaskTemplate.newBuilder()
-            .setTemplateId(777777)
+            .setTemplateId(777000)
             .setDuration(6)
             .setDetails(TaskDetails.newBuilder()
                 .setTitle("Prep Holy Pandas")
@@ -27,7 +27,7 @@ public class SampleTasksUtil {
 
     public static TaskTemplate RECURRING_DAILY_MEETING_TEMPLATE = 
         TaskTemplate.newBuilder()
-            .setTemplateId(8888888)
+            .setTemplateId(8888000)
             .setDuration(2)
             .setDetails(TaskDetails.newBuilder()
                 .setTitle("Virtual Check ")
@@ -51,7 +51,7 @@ public class SampleTasksUtil {
 
     public static TaskTemplate PROD_DAILY_CALLING_TEMPLATE = 
         TaskTemplate.newBuilder()
-            .setTemplateId(1001)
+            .setTemplateId(991000)
             .setDuration(900) // 15 min
             .setDetails(TaskDetails.newBuilder()
                 .setTitle("Reconnect")
@@ -80,7 +80,7 @@ public class SampleTasksUtil {
             .build();
     public static TaskTemplate PROD_DAILY_WORKOUT_TEMPLATE = 
         TaskTemplate.newBuilder()
-            .setTemplateId(1001)
+            .setTemplateId(99001)
             .setDuration(4200) // 70 min
             .setDetails(TaskDetails.newBuilder()
                 .setTitle("Workout")
@@ -104,7 +104,7 @@ public class SampleTasksUtil {
 
     public static TaskTemplate PROD_MONTHLY_INVEST_TEMPLATE = 
         TaskTemplate.newBuilder()
-            .setTemplateId(1002)
+            .setTemplateId(99002)
             .setDuration(1500) // 25 min
             .setDetails(TaskDetails.newBuilder()
                 .setTitle("Index Investment")
