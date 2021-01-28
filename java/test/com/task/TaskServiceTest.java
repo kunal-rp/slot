@@ -65,7 +65,7 @@ public class TaskServiceTest {
         ManagedChannel channel = grpcCleanup.register(
             channelBuilder.maxInboundMessageSize(1024).build());
 
-        TaskServiceGrpc.TaskServiceBlockingStub blockingStub = TaskServiceGrpc.newBlockingStub(channel);
+        TaskServiceGrpc.TaskServiceBlockingStub blockingStub = createBlockingStub();
         GenerateScheduleResponse response =
                 blockingStub.generateSchedule(
                     GenerateScheduleRequest.newBuilder()
@@ -76,4 +76,17 @@ public class TaskServiceTest {
         assertEquals(response.getGeneratedTaskEntryCount(), 0);
 
     }
+
+    private TaskServiceGrpc.TaskServiceBlockingStub createBlockingStub(){
+        // Add the service to the in-process server.
+         grpcCleanup.register(
+            serverBuilder.addService(injector.getInstance(TaskServiceImpl.class)).build().start());
+        ManagedChannel channel = grpcCleanup.register(
+            channelBuilder.maxInboundMessageSize(1024).build());
+
+        return TaskServiceGrpc.newBlockingStub(channel);
+
+    }
+
+
 }
