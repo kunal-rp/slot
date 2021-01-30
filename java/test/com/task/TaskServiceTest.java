@@ -59,12 +59,6 @@ public class TaskServiceTest {
                 add(SampleTasksUtil.RECURRING_DAILY_MEETING_TEMPLATE); // start time : 7, interval: 6
         }});
 
-        // Add the service to the in-process server.
-         grpcCleanup.register(
-            serverBuilder.addService(injector.getInstance(TaskServiceImpl.class)).build().start());
-        ManagedChannel channel = grpcCleanup.register(
-            channelBuilder.maxInboundMessageSize(1024).build());
-
         TaskServiceGrpc.TaskServiceBlockingStub blockingStub = createBlockingStub();
         GenerateScheduleResponse response =
                 blockingStub.generateSchedule(
@@ -77,7 +71,7 @@ public class TaskServiceTest {
 
     }
 
-    private TaskServiceGrpc.TaskServiceBlockingStub createBlockingStub(){
+    private TaskServiceGrpc.TaskServiceBlockingStub createBlockingStub() throws Exception{
         // Add the service to the in-process server.
          grpcCleanup.register(
             serverBuilder.addService(injector.getInstance(TaskServiceImpl.class)).build().start());
