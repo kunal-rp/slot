@@ -1,3 +1,4 @@
+
 syntax = "proto3";
 
 package task;
@@ -6,6 +7,7 @@ option java_package = "com.task";
 option java_outer_classname = "TaskProto";
 
 
+//Template specifying details for recurring tasks 
 message TaskTemplate {
     int32 template_id = 1;
 
@@ -14,14 +16,15 @@ message TaskTemplate {
 
     TaskDetails details = 3;
 
-    // optional project id 
-    int32 parent_project_id = 4;
+    // project id's for project 
+    repeated int32 parent_project_id = 4;
 
     // Time policy to generate occurances for task entries 
-    TimePolicy time_configuration = 5;
+    RecurringTimePolicy time_configuration = 5;
 
-    // Data collection for Task 
-    repeated DataCollectionPolicy data_collection_configuration = 6;
+    // Data collection ids for template
+    // will be referenced when creating  
+    repeated int32 data_collection_id = 6;
 
 }
 
@@ -30,22 +33,32 @@ message TaskEntry {
     // Template that entry is based off of 
     int32 template_id = 2;
 
-    TaskDetails details = 3;
-
-    int64 start_timestamp = 4;
-    int32 duration = 5;
-
-    // for entries created from rollover
-    int32 parent_entry = 6;
-
     // for reoccuring tasks, store what occurance number of task this is
-    int32 occurance = 7;
+    int32 occurance = 3;
 
-    // Alterations to time for specific entry, would be set by user ( usually when altering schedule)
-    TimeAlteractionPolicy time_alterations = 8;
+    //unix timemstamp of this specific entry
+    //Required b/c it is easier to save into entry upon creation rather than calculating the start time per recurring template id occurance
+    int64 start_timestamp = 4;
 
-    // Entry could have additional collection bedyond template specified depending on projects its assigned to
-    repeated DataCollectionPolicy data_collection_configuration = 9;
+    //unix duration of task 
+    //Required b/c it is easier to save into entry upon creation rather than calculating the start time per recurring template id occurance
+    int64 duration =5;
+
+    //Entry specific information
+    // Alterations to time for specific entry, would be set by user ( usually in real time)
+    // Even one time tasks can use these time alterations s.t. origional start time and duration are saved on file
+    TimeAlteractionPolicy time_alterations = 6;
+
+    // Project's to include this specific entry & not the template  
+    // Main use case would be for single entry in recurring tasks
+    repeated int32 additional_project_ids = 7;
+
+    // Additional Data collection to occur for this specific entry  
+    // Main use case would be for single entry in recurring tasks
+    repeated int32 additional_data_collection_ids = 8;
+
+    //Values from data collection policies
+    repeated DataCollectionValue data_collection_value = 9;
 
     enum TaskStatus {
         IN_PROGRESS = 0;
@@ -61,16 +74,7 @@ message TaskDetails {
     string description = 2;
 }
 
-message TimePolicy {
-    oneof time_type {
-        // One Time : specify single start time 
-        int64 start_timestamp = 1;
-        //Reoccuring 
-        RecurringTime recurring_time = 2;
-    }
-}
-
-message RecurringTime {
+message RecurringTimePolicy {
     // Timestamp indicating when to start creating tasks
     int64 start_timestamp = 1;
     // Interval indicating the start times for each task entry 
@@ -80,8 +84,13 @@ message RecurringTime {
     // If null, create tasks indefinently
     int64 end_timestamp = 3;
 
-
     //TODO : restrictions to allow control based on hour/day/week/month
+}
+
+message DataCollection {
+    int32 data_collection_id = 1;
+
+    repeated DataCollectionPolicy policy = 2;
 }
 
 message DataCollectionPolicy {
@@ -101,7 +110,24 @@ message DataCollectionPolicy {
     // TODO: predicate to allow for conditional show based on input from other values
     // i.e. - workout project will have DC asking for workout_type ; Push , Pull, Leg, other
     //      - create daily task for workout @ 7; iff workout_type == Push, ask for total pushups
+}
 
+message DataCollectionValue{
+
+    int32 data_collection_id = 1;
+
+    // selection values would have multiple values w/ the same key and different values 
+    repeated DataCollectionPolicyValue value = 2;
+}
+
+message DataCollectionPolicyValue {
+    string key = 1;
+
+    oneof collection_value {
+        int32 int_value = 2;
+        string string_value = 3;
+        bool boolean_value = 4;
+    }
 }
 
 message TimeAlteractionPolicy{

@@ -8,14 +8,12 @@ I would like to incorperate generation into task managment, specifically for cur
 
 This goes hand in hand with Univeral Rule, prioritizing to get accurate logs. Also will help with managment of tasks when viewing schedules for future dates
 
-Task Templates are stored w/ information about what task details are; what is due date/pattern, what data is required(seperate db); this DB will be used to generate the tasks for a schedule in the future. 
+Task Templates are stored w/ information about what recurring task details are; what is due date/pattern, what data is required(seperate db); this DB will be used to generate the tasks entries for a schedule in the future. 
 
-Per day(or time interval), a cron job will parse and run said templates to generate the tasks that were made to be due in the next 12 hours, call this the timeslot, for modifications; creating them, inputting them in entries db, and marking them as due/not-completed.To determine tasks that must immediatly go through completion flow, just need to parse for non completed tasks w/ start times in the past.
+Task entries are actual task objects dispalyed in schedules.Rcurring tasks will generate these per schedule and one time tasks will create these directly. 
 
+Per day(or time interval), a cron job will parse and run said templates to generate the recurring tasks entries that were made to be due in the next 12 hours, call this the timeslot, for modifications; creating them, inputting them in entries db, and marking them as due/not-completed.To determine tasks that must immediatly go through completion flow, just need to parse for non completed tasks w/ start times in the past.
 
-Task Entry ID Generation : 
-- One Time Task : same as template id
-- Reoccuring Task : template_id.ORIGIONAL_START_TIME
 
 Altering Timings/Data of Task:
     * get the original start time said task 
@@ -48,7 +46,7 @@ Task Data Collection ( one to many):
 
 Task Entry: 
 - task_id : int
-- template_id : int
+- template_id : int ( optional ,not needed for one time)
 - start_time : int (unix)
 - duration : int
 - start_time_alterations :

@@ -19,19 +19,6 @@ public class GenerativeScheduleUtilTest {
     GenerativeScheduleUtil scheduleUtil = new GenerativeScheduleUtil();
 
     @Test
-    public void shouldGenerateOneOneTimeEntry() throws Exception {
-
-        ArrayList<TaskTemplate> templates = new ArrayList() {{
-            add(SampleTasksUtil.ONE_TIME_MEETING_TEMPLATE); // start time : 20
-        }};
-
-        TaskEntry entry = Iterables.getOnlyElement(scheduleUtil.generateSchedule(templates, 10, 21));
-
-        assertEquals(entry.getStartTimestamp(), 20);
-
-    }
-
-    @Test
     public void shouldGenerateOneRecurringEntry() throws Exception {
     	
         ArrayList<TaskTemplate> templates = new ArrayList() {{
@@ -59,26 +46,6 @@ public class GenerativeScheduleUtilTest {
         assertEquals(entries.get(1).getOccurance(), 2);
         assertEquals(entries.get(2).getStartTimestamp(), 19);
         assertEquals(entries.get(2).getOccurance(), 3);
-
-    }
-
-    @Test
-    public void shouldGenerateMultipleRecurringAndOneTimeEntries() throws Exception {
-    	
-        ArrayList<TaskTemplate> templates = new ArrayList() {{
-        	add(SampleTasksUtil.ONE_TIME_MEETING_TEMPLATE); // start time : 20
-            add(SampleTasksUtil.RECURRING_DAILY_MEETING_TEMPLATE); // start time : 7, interval: 6
-        }};
-
-        List<TaskEntry> entries = scheduleUtil.generateSchedule(templates, 6, 20);
-
-        assertEquals(entries.get(0).getStartTimestamp(), 20);
-        assertEquals(entries.get(1).getStartTimestamp(), 7);
-        assertEquals(entries.get(1).getOccurance(), 1);
-        assertEquals(entries.get(2).getStartTimestamp(), 13);
-        assertEquals(entries.get(2).getOccurance(), 2);
-        assertEquals(entries.get(3).getStartTimestamp(), 19);
-        assertEquals(entries.get(3).getOccurance(), 3);
 
     }
 

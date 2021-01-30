@@ -2,8 +2,6 @@ package com.task.template;
 
 import com.task.TaskProto.TaskTemplate;
 import com.task.TaskProto.TaskEntry;
-import com.task.TaskProto.TimePolicy;
-import com.task.TaskProto.RecurringTime;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -25,7 +23,7 @@ public class GenerativeScheduleUtil {
 
         /*
             1) get list of all task templates whose: 
-                - (one time) start_timestamp is within schedule slot or (recurring) end time is not before slot start time
+                - end time is not before slot start time
             2) generate one time templates
                 - no changes, just return 
             3) generate recurring templates occurances
@@ -39,19 +37,12 @@ public class GenerativeScheduleUtil {
         //following block would be handled by db query search
         List<TaskTemplate> slottedTaskTemplates = 
             templates.stream().filter(
-                template -> (template.getTimeConfiguration().getStartTimestamp() != 0 ?
-                 scheduleStartTimestamp <= template.getTimeConfiguration().getStartTimestamp() && scheduleEndTimestamp >= template.getTimeConfiguration().getStartTimestamp() :  // one time 
-                 scheduleEndTimestamp >= template.getTimeConfiguration().getRecurringTime().getStartTimestamp() && (template.getTimeConfiguration().getRecurringTime().getEndTimestamp() == 0 ? true : scheduleStartTimestamp <= template.getTimeConfiguration().getRecurringTime().getEndTimestamp() ))) //reoccuring
+                template -> scheduleEndTimestamp >= template.getTimeConfiguration().getStartTimestamp() && (template.getTimeConfiguration().getEndTimestamp() == 0 ? true : scheduleStartTimestamp <= template.getTimeConfiguration().getEndTimestamp() ))
             .collect(Collectors.toList());
 
 
         for(TaskTemplate template : slottedTaskTemplates){
-            
-            if(template.getTimeConfiguration().getStartTimestamp() == 0){
-                resultingEntries.addAll(generateRecurringTimeEntries(template,calculateFirstOccurance(scheduleStartTimestamp, template),calculateLastOccurance(scheduleEndTimestamp, template)));
-            }else {
-                resultingEntries.add(generateTimeEntry(template) );
-            } 
+            resultingEntries.addAll(generateRecurringTimeEntries(template,calculateFirstOccurance(scheduleStartTimestamp, template),calculateLastOccurance(scheduleEndTimestamp, template)));
         }
 
         return resultingEntries;
@@ -60,18 +51,18 @@ public class GenerativeScheduleUtil {
 
     private int calculateFirstOccurance(int scheduleStartTimestamp, TaskTemplate template){
         int firstOcc =  (int) Math.ceil(
-            (scheduleStartTimestamp - template.getTimeConfiguration().getRecurringTime().getStartTimestamp()) /
-                (double) template.getTimeConfiguration().getRecurringTime().getIntervalSeconds());
+            (scheduleStartTimestamp - template.getTimeConfiguration().getStartTimestamp()) /
+                (double) template.getTimeConfiguration().getIntervalSeconds());
 
         // iff the calcualted first occurance(CFO) is not the beginning one for template,
         // & the end timne of the CFO -1 occurs after the start time of the slot , 
         // return CFO - 1
-        return (firstOcc > 0 && template.getTimeConfiguration().getRecurringTime().getStartTimestamp() + ((firstOcc - 1) * template.getTimeConfiguration().getRecurringTime().getIntervalSeconds()) + template.getDuration() > scheduleStartTimestamp ? firstOcc - 1 : firstOcc  );
+        return (firstOcc > 0 && template.getTimeConfiguration().getStartTimestamp() + ((firstOcc - 1) * template.getTimeConfiguration().getIntervalSeconds()) + template.getDuration() > scheduleStartTimestamp ? firstOcc - 1 : firstOcc  );
 
     }
 
      private int calculateLastOccurance(int scheduleEndTimestamp, TaskTemplate template){
-        return (int) Math.floor((scheduleEndTimestamp - template.getTimeConfiguration().getRecurringTime().getStartTimestamp()) / (double) template.getTimeConfiguration().getRecurringTime().getIntervalSeconds());
+        return (int) Math.floor((scheduleEndTimestamp - template.getTimeConfiguration().getStartTimestamp()) / (double) template.getTimeConfiguration().getIntervalSeconds());
     }
 
 
@@ -79,10 +70,8 @@ public class GenerativeScheduleUtil {
         return TaskEntry.newBuilder()
             .setEntryId(1001)
             .setTemplateId(taskTemplate.getTemplateId())
-            .setDetails(taskTemplate.getDetails())
             .setStartTimestamp(taskTemplate.getTimeConfiguration().getStartTimestamp())
             .setDuration(taskTemplate.getDuration())
-            .addAllDataCollectionConfiguration(taskTemplate.getDataCollectionConfigurationList())
             .build();
 
     }   
@@ -94,7 +83,7 @@ public class GenerativeScheduleUtil {
             TaskEntry entry = generateTimeEntry(taskTemplate);
 
             // will need to -1 to occurance b/c when calculating the first/last occurance, the first ever event is labeled as 1 & it occurs before the first interval
-            long startTime = taskTemplate.getTimeConfiguration().getRecurringTime().getStartTimestamp() + taskTemplate.getTimeConfiguration().getRecurringTime().getIntervalSeconds() * (occurance);
+            long startTime = taskTemplate.getTimeConfiguration().getStartTimestamp() + taskTemplate.getTimeConfiguration().getIntervalSeconds() * (occurance);
             //update entry start time based on occurance number
             resultingEntries.add(entry.toBuilder().setStartTimestamp(startTime).setOccurance(occurance + 1).build());
         }
