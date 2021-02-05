@@ -10,6 +10,10 @@ import 'proto/task/task.proto';
 service TaskService {
 
   rpc GenerateSchedule (GenerateScheduleRequest) returns (GenerateScheduleResponse);
+
+  rpc CreateNewTemplates (CreateNewTemplatesRequest) returns (CreateNewTemplatesResponse);
+
+  rpc UpdateTemplate (UpdateTemplateRequest) returns (UpdateTemplateResponse);
 }
 
 message GenerateScheduleRequest {
@@ -19,4 +23,25 @@ message GenerateScheduleRequest {
 
 message GenerateScheduleResponse{
 	repeated task.TaskEntry generated_task_entry = 1;
+}
+
+message CreateNewTemplatesRequest{
+	//Templates to add, will not have template id 
+	repeated TaskTemplate templates_to_add = 1;
+}
+
+message CreateNewTemplatesResponse{
+	//Templates just added, will have template id
+	repeated TaskTemplate created_templates = 1;
+}
+
+message UpdateTemplateRequest{
+	int32 template_id = 1;
+	int32 end_timestamp = 2;
+	string description= 3;
+	repeated int32 data_collection_id = 4;
+}
+
+message UpdateTemplateResponse{
+
 }

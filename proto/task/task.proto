@@ -139,12 +139,12 @@ message TimeAlteractionPolicy{
 message Project {
      int32 project_id = 1;
 
-     string tag = 2; 
+    string tag = 2; 
 
-     string description = 3; 
+    string description = 3; 
 
-     repeat int32 data_collection_id = 4;
+    repeated int32 data_collection_id = 4;
 
-     repeat sub_project_id = 5; 
+    repeated int32 sub_project_id = 5; 
 
 }

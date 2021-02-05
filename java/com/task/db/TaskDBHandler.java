@@ -1,18 +1,21 @@
 package com.task.db;
 
+import java.util.Optional;
 import java.util.List;
-import java.util.concurrent.Future;
 import com.task.TaskProto.TaskTemplate;
+import com.task.TaskProto.TimeAlteractionPolicy;
+import com.google.common.util.concurrent.ListenableFuture;
 
 /* 
 	DB Util for all task related operations  
 */ 
 public interface TaskDBHandler {
 
-    public List<TaskTemplate> fetchTemplatesForTimeslot(int startUnix, int endUnix);
+	//Template
+    public ListenableFuture<List<TaskTemplate>> fetchTemplatesForTimeslot(int startUnix, int endUnix);
 
-    public Future<TaskTemplate> insertNewTemplate(TaskTemplate templateDetailsToInsert);
+    public ListenableFuture<List<TaskTemplate>> insertNewTemplates(List<TaskTemplate> templatesToInsert);
 
-    public void deleteTemplate(int templateId); 
+    public ListenableFuture<Void> alterTemplate(int templateId, Optional<Integer> newEndTime,Optional<String> descriptionAlteration, Optional<List<Integer>> newDataCollectionIds );
 
 }

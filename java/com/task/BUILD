@@ -45,7 +45,8 @@ java_library(
     srcs = ["TaskServiceImpl.java"],
     deps = [
         "@maven//:com_google_inject_guice",
-        "@io_grpc_grpc_java//api",        
+        "@io_grpc_grpc_java//api",
+        "@com_google_api_grpc_proto_google_common_protos//:com_google_api_grpc_proto_google_common_protos",
         ":task_handler",
         "//proto/task:task_service_java_proto",
         "//java/com/task/db:task_db_handler",
