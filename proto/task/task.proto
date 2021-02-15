@@ -1,4 +1,3 @@
-
 syntax = "proto3";
 
 package task;
@@ -96,6 +95,7 @@ message DataCollection {
 message DataCollectionPolicy {
 
     // Key to store data value with for task entry
+    // this should be unique 
     string key = 1;
 
     string prompt = 2; 
@@ -131,7 +131,7 @@ message DataCollectionPolicyValue {
 }
 
 message TimeAlteractionPolicy{
-    int64 start_time_surplus = 1;
+    int64 start_timestamp_surplus = 1;
     int64 duration_surplus = 2;
 }
 

@@ -75,6 +75,44 @@ public class TaskServiceTest {
         assertEquals(response.getGeneratedTaskEntryCount(), 1);
     }
 
+    @Test
+    public void shouldFetchGeneratedTemplateAndStoredTemplate() throws Exception {
+        fakeTaskDBHandler.setTemplatesToReturnInTimeslot(
+            new ArrayList() {{
+                add(SampleTasksUtil.RECURRING_DAILY_MEETING_TEMPLATE); // start time : 7, duration: 2, interval: 6
+        }});
+
+        fakeTaskDBHandler.setEntryDb(new ArrayList() {{
+                add(SampleTasksUtil.ONE_TIME_INDIVIDUAL_IP_ENTRY); // start time : 8, duration: 3
+        }});
+
+        TaskServiceGrpc.TaskServiceBlockingStub blockingStub = createBlockingStub();
+        GenerateScheduleResponse response =
+                blockingStub.generateSchedule(
+                    GenerateScheduleRequest.newBuilder()
+                        .setScheduleStartUnix(6)
+                        .setScheduleEndUnix(9)
+                    .build());
+
+        assertEquals(response.getGeneratedTaskEntryCount(), 2);
+    }
+
+    //Test Mainly for fake handler logic 
+    @Test
+    public void shouldFetchNoTemplatesOrEntries() throws Exception {
+
+        TaskServiceGrpc.TaskServiceBlockingStub blockingStub = createBlockingStub();
+        GenerateScheduleResponse response =
+                blockingStub.generateSchedule(
+                    GenerateScheduleRequest.newBuilder()
+                        .setScheduleStartUnix(6)
+                        .setScheduleEndUnix(9)
+                    .build());
+
+        assertEquals(response.getGeneratedTaskEntryCount(), 0);
+    }
+
+
      @Test
     public void shouldInsertNewTemplate() throws Exception {
 

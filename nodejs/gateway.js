@@ -15,8 +15,8 @@ app.get('/', (req, res) => {
   res.send('this is the GATEWAY!')
 })
 
-var testRequest = new taskProto.GenerateScheduleRequest().setScheduleStartUnix(1610240520)
-                    .setScheduleEndUnix(1610388800);
+var testRequest = new taskProto.GenerateScheduleRequest().setScheduleStartUnix(1610240520) // 1/10/21
+                    .setScheduleEndUnix(1612915200); // 2/10/21
 
 app.get('/testgrpc', (req, res) => {
   console.log("testgrpc recieved")

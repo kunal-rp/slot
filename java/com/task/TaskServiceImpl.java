@@ -1,9 +1,14 @@
 package com.task;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream; 
+import java.util.concurrent.Callable;
 import com.google.inject.Inject;
 import com.google.rpc.Status;
+import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.protobuf.StatusProto;
@@ -17,6 +22,9 @@ import com.task.TaskServiceProto.CreateNewTemplatesRequest;
 import com.task.TaskServiceProto.CreateNewTemplatesResponse;
 import com.task.TaskServiceProto.UpdateTemplateRequest;
 import com.task.TaskServiceProto.UpdateTemplateResponse;
+import com.task.TaskProto.TaskEntry;
+import com.task.TaskProto.TaskTemplate;
+import com.task.TaskDBProto.DBFetchEntriesRequest;
 
 public class TaskServiceImpl extends TaskServiceGrpc.TaskServiceImplBase {
 
@@ -36,14 +44,41 @@ public class TaskServiceImpl extends TaskServiceGrpc.TaskServiceImplBase {
         int startTime = (int) req.getScheduleStartUnix();
         int endTime = (int) req.getScheduleEndUnix();
 
+        ListenableFuture<List<TaskTemplate>> fetchTemplatesFuture = taskDBHandler.fetchTemplatesForTimeslot(startTime, endTime);
+        ListenableFuture<List<TaskEntry>> fetchEntryFuture = taskDBHandler.fetchEntries(
+            DBFetchEntriesRequest.newBuilder()
+                .setIncludeTimeAlterations(true)
+                .setStartingUnix(startTime)
+                .setEndingUnix(endTime)
+            .build());
+
+        //TODO : update do correct fetching of templates & entries
+        // for now, return genreated entries and existing entries from timeslot 
+        // https://guava.dev/releases/20.0/api/docs/com/google/common/util/concurrent/Futures.FutureCombiner.html
+
+           Callable<List<TaskEntry>> combineEntryCallable =
+               new Callable<List<TaskEntry>>() {
+                 public List<TaskEntry> call() throws Exception {
+                    return 
+                        Stream.concat(
+                            scheduleUtil.generateSchedule(
+                                fetchTemplatesFuture.get(),
+                                startTime,
+                                endTime
+                            ).stream(),
+                            fetchEntryFuture.get().stream())
+                        .collect(toList());
+                 }
+               };
+           ListenableFuture<List<TaskEntry>> combinedTasks =
+               Futures.whenAllSucceed(fetchTemplatesFuture, fetchEntryFuture)
+                   .call(combineEntryCallable, MoreExecutors.newDirectExecutorService());
+
         try {
             responseObserver.onNext(
             	GenerateScheduleResponse.newBuilder()
             		.addAllGeneratedTaskEntry(
-            			scheduleUtil.generateSchedule(
-            				taskDBHandler.fetchTemplatesForTimeslot(startTime, endTime).get(),
-            				startTime,
-            				endTime))
+            				combinedTasks.get())
             		.build());
         }catch(Exception e){
             Status status = Status.newBuilder()

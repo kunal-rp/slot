@@ -6,8 +6,9 @@ java_library(
     name = "task_db_handler",
     srcs = ["TaskDBHandler.java"],
     deps = [
-    "@maven//:com_google_guava_guava",
+        "@maven//:com_google_guava_guava",
         "//proto/task:task_java_proto",
+        "//proto/task:task_db_java_proto",
     ],
 )
 
@@ -18,6 +19,7 @@ java_library(
         "@maven//:com_google_guava_guava",
         ":task_db_handler",
         "//proto/task:task_java_proto",
+        "//proto/task:task_db_java_proto",
         "//java/com/task:sample_tasks_util"
     ],
 )
@@ -30,5 +32,6 @@ java_library(
         "@maven//:com_google_guava_guava",
         ":task_db_handler",
         "//proto/task:task_java_proto",
+        "//proto/task:task_db_java_proto",
     ],
 )

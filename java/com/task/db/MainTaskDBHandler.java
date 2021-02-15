@@ -4,10 +4,13 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.Random;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 import com.google.common.util.concurrent.Futures;
+import com.task.TaskProto.TaskEntry;
 import com.task.TaskProto.TaskTemplate;
 import com.task.TaskProto.TimeAlteractionPolicy;
+import com.task.TaskDBProto.DBFetchEntriesRequest;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.task.SampleTasksUtil;
 
@@ -24,5 +27,9 @@ public class MainTaskDBHandler implements TaskDBHandler{
     public ListenableFuture<Void> alterTemplate(int templateId, Optional<Integer> newEndTime,Optional<String> descriptionAlteration, Optional<List<Integer>> newDataCollectionIds ){
     	return Futures.immediateFuture(null);
     }
+
+    public ListenableFuture<List<TaskEntry>> fetchEntries(DBFetchEntriesRequest fetchEntriesRequest){
+     	return Futures.immediateFuture(new ArrayList<TaskEntry>());
+     }
 
 }

@@ -49,6 +49,7 @@ java_library(
         "@com_google_api_grpc_proto_google_common_protos//:com_google_api_grpc_proto_google_common_protos",
         ":task_handler",
         "//proto/task:task_service_java_proto",
+        "//proto/task:task_db_java_proto",
         "//java/com/task/db:task_db_handler",
         "//java/com/task/template:generative_schedule_util",
     ],

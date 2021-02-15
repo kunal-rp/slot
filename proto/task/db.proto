@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package db;
+
+option java_package = "com.task";
+option java_outer_classname = "TaskDBProto";
+
+message DBFetchEntriesRequest {
+	// starting and ending time for entries 
+	// should query for original time + time alterations
+	int32 starting_unix = 1;
+	int32 ending_unix = 2;
+
+	bool include_time_alterations = 3;
+
+	// filter for entries w/ corresponding template id & occurance numbers
+	repeated TemplateId valid_template_id = 4;
+
+	// filter out entries w/ corresponding template id & occurance numbers
+	repeated TemplateId invalid_template_id = 5;
+
+}
+
+message TemplateId {
+	int32 template_id = 1;
+	int32 occurance = 2;
+}
+
+

@@ -2,6 +2,7 @@ package com.task;
 
 import java.util.List;
 import java.util.ArrayList;
+import com.task.TaskProto.TaskEntry;
 import com.task.TaskProto.TaskTemplate;
 import com.task.TaskProto.RecurringTimePolicy;
 import com.task.TaskProto.TaskDetails;
@@ -137,10 +138,23 @@ public class SampleTasksUtil {
             .addDataCollectionId(INVESTMENT_DC.getDataCollectionId())
             .build();
 
+     public static TaskEntry ONE_TIME_INDIVIDUAL_IP_ENTRY = 
+        TaskEntry.newBuilder()
+            .setEntryId(55000)
+            // no template id 
+            .setStartTimestamp(8)
+            .setDuration(3) 
+            .setStatus(TaskEntry.TaskStatus.IN_PROGRESS)
+            .build();
+
     public static List<TaskTemplate> PROD_TEMPLATES = new ArrayList<TaskTemplate>(){{
         add(PROD_DAILY_CALLING_TEMPLATE);
         add(PROD_MONTHLY_INVEST_TEMPLATE);
         add(PROD_DAILY_WORKOUT_TEMPLATE);
+    }};
+
+    public static List<TaskEntry> PROD_ENTRYS = new ArrayList<TaskEntry>(){{
+    
     }};
 
 }

@@ -2,8 +2,10 @@ package com.task.db;
 
 import java.util.Optional;
 import java.util.List;
+import com.task.TaskProto.TaskEntry;
 import com.task.TaskProto.TaskTemplate;
 import com.task.TaskProto.TimeAlteractionPolicy;
+import com.task.TaskDBProto.DBFetchEntriesRequest;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /* 
@@ -17,5 +19,7 @@ public interface TaskDBHandler {
     public ListenableFuture<List<TaskTemplate>> insertNewTemplates(List<TaskTemplate> templatesToInsert);
 
     public ListenableFuture<Void> alterTemplate(int templateId, Optional<Integer> newEndTime,Optional<String> descriptionAlteration, Optional<List<Integer>> newDataCollectionIds );
+
+    public ListenableFuture<List<TaskEntry>> fetchEntries(DBFetchEntriesRequest fetchEntriesRequest);
 
 }
