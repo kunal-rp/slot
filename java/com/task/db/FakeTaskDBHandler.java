@@ -11,6 +11,7 @@ import com.task.TaskProto.TaskTemplate;
 import com.task.TaskProto.TaskEntry;
 import com.task.TaskProto.TimeAlteractionPolicy;
 import com.task.TaskDBProto.DBFetchEntriesRequest;
+import com.task.TaskDBProto.UpdateDBEntryRequest;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.inject.Singleton;
 
@@ -87,6 +88,44 @@ public class FakeTaskDBHandler implements TaskDBHandler{
         return Futures.immediateFuture(
             entryDb.stream().filter(entry ->shouldSelectEntry(entry, fetchEntriesRequest) ).collect(toList()));
 
+    }
+
+    @Override
+    public ListenableFuture<Void> alterEntry(UpdateDBEntryRequest updateDBEntryRequest){
+        if(!failOperation){
+            entryDb = entryDb.stream().map(entry -> entry.getEntryId() ==  updateDBEntryRequest.getEntryId() ? updateEntry(updateDBEntryRequest, entry) : entry).collect(toList());
+            return Futures.immediateFuture(null);
+        }else{
+            throw new java.lang.UnsupportedOperationException("Fake DB alter error");
+        }
+    }
+
+    private TaskEntry updateEntry(UpdateDBEntryRequest updateDBEntryRequest, TaskEntry taskEntry) {
+
+        TaskEntry.Builder builder = taskEntry.toBuilder();
+
+        if(updateDBEntryRequest.hasUpdatedDetails()){
+            builder.setDetails(updateDBEntryRequest.getUpdatedDetails());
+        }
+
+        if(updateDBEntryRequest.hasNewTimeAlterations()){
+            builder.setTimeAlterations(updateDBEntryRequest.getNewTimeAlterations());
+        }
+
+        if(updateDBEntryRequest.getUpdatedAdditionalProjectIdsCount() > 0){
+            builder.clearAdditionalProjectIds().addAllAdditionalProjectIds(updateDBEntryRequest.getUpdatedAdditionalProjectIdsList());
+        }
+
+        if(updateDBEntryRequest.getUpdatedAdditionalDataCollectionIdsCount() > 0){
+            builder.clearAdditionalDataCollectionIds().addAllAdditionalDataCollectionIds(updateDBEntryRequest.getUpdatedAdditionalDataCollectionIdsList());
+        }
+
+
+        if(updateDBEntryRequest.hasUpdatedDataCollectionValue()){
+            builder.setDataCollectionValue(updateDBEntryRequest.getUpdatedDataCollectionValue());
+        }
+
+        return builder.build();
     }
 
     private boolean shouldSelectEntry(TaskEntry taskEntry, DBFetchEntriesRequest fetchEntriesRequest){

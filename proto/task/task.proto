@@ -29,42 +29,45 @@ message TaskTemplate {
 
 message TaskEntry {
     int32 entry_id = 1;
+
+    TaskDetails details = 2;
+
     // Template that entry is based off of 
-    int32 template_id = 2;
+    int32 template_id = 3;
 
     // for reoccuring tasks, store what occurance number of task this is
-    int32 occurance = 3;
+    int32 occurance = 4;
 
     //unix timemstamp of this specific entry
     //Required b/c it is easier to save into entry upon creation rather than calculating the start time per recurring template id occurance
-    int64 start_timestamp = 4;
+    int64 start_timestamp = 5;
 
     //unix duration of task 
     //Required b/c it is easier to save into entry upon creation rather than calculating the start time per recurring template id occurance
-    int64 duration =5;
+    int64 duration = 6;
 
     //Entry specific information
     // Alterations to time for specific entry, would be set by user ( usually in real time)
     // Even one time tasks can use these time alterations s.t. origional start time and duration are saved on file
-    TimeAlteractionPolicy time_alterations = 6;
+    TimeAlteractionPolicy time_alterations = 7;
 
     // Project's to include this specific entry & not the template  
     // Main use case would be for single entry in recurring tasks
-    repeated int32 additional_project_ids = 7;
+    repeated int32 additional_project_ids = 8;
 
     // Additional Data collection to occur for this specific entry  
     // Main use case would be for single entry in recurring tasks
-    repeated int32 additional_data_collection_ids = 8;
+    repeated int32 additional_data_collection_ids = 9;
 
-    //Values from data collection policies
-    repeated DataCollectionValue data_collection_value = 9;
+    // Values from data collection policies
+    DataCollectionValue data_collection_value = 10;
 
     enum TaskStatus {
         IN_PROGRESS = 0;
         FINISHED = 1;
         INCOMPLETE = 2;
     }
-    TaskStatus status = 10; 
+    TaskStatus status = 11; 
 
 }
 
@@ -112,7 +115,12 @@ message DataCollectionPolicy {
     //      - create daily task for workout @ 7; iff workout_type == Push, ask for total pushups
 }
 
-message DataCollectionValue{
+message DataCollectionValue {
+
+    repeated SingleDataCollectionValue sing_data_collection_value = 1;
+}
+
+message SingleDataCollectionValue{
 
     int32 data_collection_id = 1;
 

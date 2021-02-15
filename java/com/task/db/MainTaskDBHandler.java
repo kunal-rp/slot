@@ -11,6 +11,7 @@ import com.task.TaskProto.TaskEntry;
 import com.task.TaskProto.TaskTemplate;
 import com.task.TaskProto.TimeAlteractionPolicy;
 import com.task.TaskDBProto.DBFetchEntriesRequest;
+import com.task.TaskDBProto.UpdateDBEntryRequest;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.task.SampleTasksUtil;
 
@@ -30,6 +31,10 @@ public class MainTaskDBHandler implements TaskDBHandler{
 
     public ListenableFuture<List<TaskEntry>> fetchEntries(DBFetchEntriesRequest fetchEntriesRequest){
      	return Futures.immediateFuture(new ArrayList<TaskEntry>());
-     }
+    }
+
+    public ListenableFuture<Void> alterEntry(UpdateDBEntryRequest updateDBEntryRequest){
+        return Futures.immediateFuture(null); 
+    }
 
 }

@@ -18,6 +18,7 @@ java_proto_library(
 proto_library(
     name = "task_db_proto",
     srcs = ["db.proto"],
+    deps = [":task_proto"]
 )
 
 java_proto_library(
