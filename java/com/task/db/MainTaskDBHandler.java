@@ -9,9 +9,11 @@ import java.util.Optional;
 import com.google.common.util.concurrent.Futures;
 import com.task.TaskProto.TaskEntry;
 import com.task.TaskProto.TaskTemplate;
+import com.task.TaskProto.Project;
 import com.task.TaskProto.TimeAlteractionPolicy;
 import com.task.TaskDBProto.DBFetchEntriesRequest;
 import com.task.TaskDBProto.UpdateDBEntryRequest;
+import com.task.TaskDBProto.DBFetchProjectsRequest;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.task.SampleTasksUtil;
 
@@ -35,6 +37,10 @@ public class MainTaskDBHandler implements TaskDBHandler{
 
     public ListenableFuture<Void> alterEntry(UpdateDBEntryRequest updateDBEntryRequest){
         return Futures.immediateFuture(null); 
+    }
+
+    public ListenableFuture<List<Project>> fetchProjects(DBFetchProjectsRequest fetchProjectsRequest){
+        return Futures.immediateFuture(new ArrayList<Project>());
     }
 
 }

@@ -9,14 +9,18 @@ import java.util.ArrayList;
 import com.google.common.util.concurrent.Futures;
 import com.task.TaskProto.TaskTemplate;
 import com.task.TaskProto.TaskEntry;
+import com.task.TaskProto.Project;
 import com.task.TaskProto.TimeAlteractionPolicy;
 import com.task.TaskDBProto.DBFetchEntriesRequest;
 import com.task.TaskDBProto.UpdateDBEntryRequest;
+import com.task.TaskDBProto.DBFetchProjectsRequest;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.inject.Singleton;
 
 @Singleton
 public class FakeTaskDBHandler implements TaskDBHandler{
+
+    private boolean failOperation = false;
 
     // Template 
 	private List<TaskTemplate> templatesInTimeSlot = new ArrayList<TaskTemplate>();
@@ -25,7 +29,9 @@ public class FakeTaskDBHandler implements TaskDBHandler{
 
     //Task
     private List<TaskEntry> entryDb = new ArrayList<TaskEntry>();
-	private boolean failOperation = false;
+
+    //Projects
+    private List<Project> projectDb = new ArrayList<Project>();
 
     @Override
     public ListenableFuture<List<TaskTemplate>> fetchTemplatesForTimeslot(int startUnix, int endUnix){
@@ -126,6 +132,13 @@ public class FakeTaskDBHandler implements TaskDBHandler{
         }
 
         return builder.build();
+    }
+
+    @Override
+    public ListenableFuture<List<Project>> fetchProjects(DBFetchProjectsRequest fetchProjectsRequest){
+        return Futures.immediateFuture(
+            projectDb.stream().filter(project -> fetchProjectsRequest.getProjectIdsList().contains(project.getProjectId())).collect(toList()));
+
     }
 
     private boolean shouldSelectEntry(TaskEntry taskEntry, DBFetchEntriesRequest fetchEntriesRequest){

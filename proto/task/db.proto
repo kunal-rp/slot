@@ -43,4 +43,8 @@ message UpdateDBEntryRequest {
 	task.DataCollectionValue updated_data_collection_value = 6;
 }
 
+message DBFetchProjectsRequest {
+	repeated int32 project_ids = 1;
+}
+
 
