@@ -48,7 +48,7 @@ public class GenerativeScheduleUtil {
 
     private TaskEntry generateTimeEntry(TaskTemplate taskTemplate) {
         return TaskEntry.newBuilder()
-            .setEntryId(1001)
+            .setGeneratedEntryId(1001)
             .setTemplateId(taskTemplate.getTemplateId())
             .setStartTimestamp(taskTemplate.getTimeConfiguration().getStartTimestamp())
             .setDuration(taskTemplate.getDuration())

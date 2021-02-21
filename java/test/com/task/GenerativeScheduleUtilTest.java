@@ -28,6 +28,8 @@ public class GenerativeScheduleUtilTest {
         TaskEntry entry = Iterables.getOnlyElement(scheduleUtil.generateSchedule(templates, 6, 9));
 
         assertEquals(entry.getStartTimestamp(), 7);
+        // hardcoded generated task id
+        assertEquals(entry.getGeneratedEntryId(), 1001);
 
     }
 
@@ -60,7 +62,8 @@ public class GenerativeScheduleUtilTest {
 
         // there is 
         assertEquals(entry.getStartTimestamp(), 7);
-
+        // hardcoded generated task id
+        assertEquals(entry.getGeneratedEntryId(), 1001);
     }
 
 

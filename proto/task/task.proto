@@ -28,7 +28,14 @@ message TaskTemplate {
 }
 
 message TaskEntry {
-    int32 entry_id = 1;
+
+    oneof id {
+
+        int32 entry_id = 1;
+
+        // for generated entries from template this is set 
+        int32 generated_entry_id = 12;
+    }
 
     TaskDetails details = 2;
 
