@@ -92,6 +92,9 @@ public class FakeTaskDBHandler implements TaskDBHandler{
 
     @Override
     public ListenableFuture<List<TaskEntry>> fetchEntries(DBFetchEntriesRequest fetchEntriesRequest){
+        System.out.println("fetchEntries");
+        System.out.println(fetchEntriesRequest);
+        System.out.println(entryDb.stream().filter(entry ->shouldSelectEntry(entry, fetchEntriesRequest) ).collect(toList()));
         return Futures.immediateFuture(
             entryDb.stream().filter(entry ->shouldSelectEntry(entry, fetchEntriesRequest) ).collect(toList()));
 
@@ -138,7 +141,7 @@ public class FakeTaskDBHandler implements TaskDBHandler{
         boolean entryStartDuringTimeslot = fetchEntriesRequest.getStartingUnix() <= entryStartTimestamp && entryStartTimestamp < fetchEntriesRequest.getEndingUnix();
         boolean entryEndsDuringTimeslot = fetchEntriesRequest.getEndingUnix() > entryStartTimestamp + entryDuration && entryStartTimestamp + entryDuration  >= fetchEntriesRequest.getEndingUnix();
 
-        if(!(entryStartDuringTimeslot || entryEndsDuringTimeslot)){
+        if(fetchEntriesRequest.getStartingUnix() != 0 && fetchEntriesRequest.getEndingUnix() != 0 && !(entryStartDuringTimeslot || entryEndsDuringTimeslot)){
             return false;
         }
 
