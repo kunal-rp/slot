@@ -6,6 +6,7 @@ import com.task.TaskProto.TaskEntry;
 import com.task.TaskProto.TaskTemplate;
 import com.task.TaskProto.Project;
 import com.task.TaskProto.TimeAlteractionPolicy;
+import com.task.TaskDBProto.DBFetchTemplateRequest;
 import com.task.TaskDBProto.DBFetchEntriesRequest;
 import com.task.TaskDBProto.UpdateDBEntryRequest;
 import com.task.TaskDBProto.DBFetchProjectsRequest;
@@ -17,7 +18,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 public interface TaskDBHandler {
 
 	//Template
-    public ListenableFuture<List<TaskTemplate>> fetchTemplatesForTimeslot(int startUnix, int endUnix);
+    public ListenableFuture<List<TaskTemplate>> fetchTemplates(DBFetchTemplateRequest fetchTemplateRequest);
 
     public ListenableFuture<List<TaskTemplate>> insertNewTemplates(List<TaskTemplate> templatesToInsert);
 

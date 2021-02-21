@@ -69,10 +69,10 @@ public class GenerativeScheduleUtilTest {
     public void shouldGenerateNoEntries() throws Exception {
     	
         ArrayList<TaskTemplate> templates = new ArrayList() {{
-            add(SampleTasksUtil.RECURRING_DAILY_MEETING_TEMPLATE); // start time : 7, interval: 6
+            add(SampleTasksUtil.RECURRING_DAILY_MEETING_TEMPLATE); // start time : 7, interval: 6,duration: 2
         }};
 
-         List<TaskEntry> entries = scheduleUtil.generateSchedule(templates, 0, 3);
+         List<TaskEntry> entries = scheduleUtil.generateSchedule(templates, 10, 11);
 
         assertEquals(entries.size(), 0);
 

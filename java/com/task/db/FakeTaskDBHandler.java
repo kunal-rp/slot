@@ -11,6 +11,7 @@ import com.task.TaskProto.TaskTemplate;
 import com.task.TaskProto.TaskEntry;
 import com.task.TaskProto.Project;
 import com.task.TaskProto.TimeAlteractionPolicy;
+import com.task.TaskDBProto.DBFetchTemplateRequest;
 import com.task.TaskDBProto.DBFetchEntriesRequest;
 import com.task.TaskDBProto.UpdateDBEntryRequest;
 import com.task.TaskDBProto.DBFetchProjectsRequest;
@@ -23,7 +24,6 @@ public class FakeTaskDBHandler implements TaskDBHandler{
     private boolean failOperation = false;
 
     // Template 
-	private List<TaskTemplate> templatesInTimeSlot = new ArrayList<TaskTemplate>();
 	private List<TaskTemplate> templatesAdded = new ArrayList<TaskTemplate>();
     private List<TaskTemplate> templateDb = new ArrayList<TaskTemplate>();
 
@@ -34,10 +34,11 @@ public class FakeTaskDBHandler implements TaskDBHandler{
     private List<Project> projectDb = new ArrayList<Project>();
 
     @Override
-    public ListenableFuture<List<TaskTemplate>> fetchTemplatesForTimeslot(int startUnix, int endUnix){
+    public ListenableFuture<List<TaskTemplate>> fetchTemplates(DBFetchTemplateRequest fetchTemplateRequest){
 
     	if(!failOperation){
-    		return Futures.immediateFuture(templatesInTimeSlot);
+    		return Futures.immediateFuture(
+            templateDb.stream().filter(template ->shouldSelectTemplate(template, fetchTemplateRequest) ).collect(toList()));
     	}else{
     		throw new java.lang.UnsupportedOperationException("Fake DB fetch error");
     	}
@@ -106,39 +107,22 @@ public class FakeTaskDBHandler implements TaskDBHandler{
         }
     }
 
-    private TaskEntry updateEntry(UpdateDBEntryRequest updateDBEntryRequest, TaskEntry taskEntry) {
-
-        TaskEntry.Builder builder = taskEntry.toBuilder();
-
-        if(updateDBEntryRequest.hasUpdatedDetails()){
-            builder.setDetails(updateDBEntryRequest.getUpdatedDetails());
-        }
-
-        if(updateDBEntryRequest.hasNewTimeAlterations()){
-            builder.setTimeAlterations(updateDBEntryRequest.getNewTimeAlterations());
-        }
-
-        if(updateDBEntryRequest.getUpdatedAdditionalProjectIdsCount() > 0){
-            builder.clearAdditionalProjectIds().addAllAdditionalProjectIds(updateDBEntryRequest.getUpdatedAdditionalProjectIdsList());
-        }
-
-        if(updateDBEntryRequest.getUpdatedAdditionalDataCollectionIdsCount() > 0){
-            builder.clearAdditionalDataCollectionIds().addAllAdditionalDataCollectionIds(updateDBEntryRequest.getUpdatedAdditionalDataCollectionIdsList());
-        }
-
-
-        if(updateDBEntryRequest.hasUpdatedDataCollectionValue()){
-            builder.setDataCollectionValue(updateDBEntryRequest.getUpdatedDataCollectionValue());
-        }
-
-        return builder.build();
-    }
-
     @Override
     public ListenableFuture<List<Project>> fetchProjects(DBFetchProjectsRequest fetchProjectsRequest){
         return Futures.immediateFuture(
             projectDb.stream().filter(project -> fetchProjectsRequest.getProjectIdsList().contains(project.getProjectId())).collect(toList()));
 
+    }
+
+    private boolean shouldSelectTemplate(TaskTemplate taskTemplate, DBFetchTemplateRequest fetchTemplateRequest){
+
+        int startingUnix  = (int) fetchTemplateRequest.getStartingUnix();
+        int endingUnix  = (int) fetchTemplateRequest.getEndingUnix();
+
+        boolean templateStartsBeforeEndingUnix  = endingUnix >= taskTemplate.getTimeConfiguration().getStartTimestamp();
+        boolean templateEndsAfterStartingUnix = (taskTemplate.getTimeConfiguration().getEndTimestamp() == 0 ? true : startingUnix <= taskTemplate.getTimeConfiguration().getEndTimestamp()); 
+
+        return templateStartsBeforeEndingUnix && templateEndsAfterStartingUnix;
     }
 
     private boolean shouldSelectEntry(TaskEntry taskEntry, DBFetchEntriesRequest fetchEntriesRequest){
@@ -176,17 +160,41 @@ public class FakeTaskDBHandler implements TaskDBHandler{
         return true;
     }
 
+    private TaskEntry updateEntry(UpdateDBEntryRequest updateDBEntryRequest, TaskEntry taskEntry) {
+
+        TaskEntry.Builder builder = taskEntry.toBuilder();
+
+        if(updateDBEntryRequest.hasUpdatedDetails()){
+            builder.setDetails(updateDBEntryRequest.getUpdatedDetails());
+        }
+
+        if(updateDBEntryRequest.hasNewTimeAlterations()){
+            builder.setTimeAlterations(updateDBEntryRequest.getNewTimeAlterations());
+        }
+
+        if(updateDBEntryRequest.getUpdatedAdditionalProjectIdsCount() > 0){
+            builder.clearAdditionalProjectIds().addAllAdditionalProjectIds(updateDBEntryRequest.getUpdatedAdditionalProjectIdsList());
+        }
+
+        if(updateDBEntryRequest.getUpdatedAdditionalDataCollectionIdsCount() > 0){
+            builder.clearAdditionalDataCollectionIds().addAllAdditionalDataCollectionIds(updateDBEntryRequest.getUpdatedAdditionalDataCollectionIdsList());
+        }
+
+
+        if(updateDBEntryRequest.hasUpdatedDataCollectionValue()){
+            builder.setDataCollectionValue(updateDBEntryRequest.getUpdatedDataCollectionValue());
+        }
+
+        return builder.build();
+    }
+
     public void reset() {
         templatesAdded = new ArrayList<TaskTemplate>();
-    	templatesInTimeSlot = new ArrayList<TaskTemplate>();
         templateDb = new ArrayList<TaskTemplate>();
         entryDb = new ArrayList<TaskEntry>();
     	failOperation = false;
     }
 
-    public void setTemplatesToReturnInTimeslot(List<TaskTemplate> templatesInTimeSlot){
-    	this.templatesInTimeSlot = templatesInTimeSlot;
-    }
 
     public void setTemplateDb(List<TaskTemplate> templateDb){
         this.templateDb = templateDb;

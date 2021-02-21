@@ -11,6 +11,7 @@ import com.task.TaskProto.TaskEntry;
 import com.task.TaskProto.TaskTemplate;
 import com.task.TaskProto.Project;
 import com.task.TaskProto.TimeAlteractionPolicy;
+import com.task.TaskDBProto.DBFetchTemplateRequest;
 import com.task.TaskDBProto.DBFetchEntriesRequest;
 import com.task.TaskDBProto.UpdateDBEntryRequest;
 import com.task.TaskDBProto.DBFetchProjectsRequest;
@@ -19,7 +20,7 @@ import com.task.SampleTasksUtil;
 
 public class MainTaskDBHandler implements TaskDBHandler{
 
-    public ListenableFuture<List<TaskTemplate>> fetchTemplatesForTimeslot(int startUnix, int endUnix){
+    public ListenableFuture<List<TaskTemplate>> fetchTemplates(DBFetchTemplateRequest fetchTemplateRequest){
     	return Futures.immediateFuture(SampleTasksUtil.PROD_TEMPLATES);
     }
 

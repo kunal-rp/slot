@@ -24,6 +24,7 @@ import com.task.TaskServiceProto.UpdateTemplateRequest;
 import com.task.TaskServiceProto.UpdateTemplateResponse;
 import com.task.TaskProto.TaskEntry;
 import com.task.TaskProto.TaskTemplate;
+import com.task.TaskDBProto.DBFetchTemplateRequest;
 import com.task.TaskDBProto.DBFetchEntriesRequest;
 
 public class TaskServiceImpl extends TaskServiceGrpc.TaskServiceImplBase {
@@ -44,7 +45,7 @@ public class TaskServiceImpl extends TaskServiceGrpc.TaskServiceImplBase {
         int startTime = (int) req.getScheduleStartUnix();
         int endTime = (int) req.getScheduleEndUnix();
 
-        ListenableFuture<List<TaskTemplate>> fetchTemplatesFuture = taskDBHandler.fetchTemplatesForTimeslot(startTime, endTime);
+        ListenableFuture<List<TaskTemplate>> fetchTemplatesFuture = taskDBHandler.fetchTemplates(DBFetchTemplateRequest.newBuilder().setStartingUnix(startTime).setEndingUnix(endTime).build());
         ListenableFuture<List<TaskEntry>> fetchEntryFuture = taskDBHandler.fetchEntries(
             DBFetchEntriesRequest.newBuilder()
                 .setIncludeTimeAlterations(true)

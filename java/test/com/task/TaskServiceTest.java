@@ -59,7 +59,7 @@ public class TaskServiceTest {
 
     @Test
     public void shouldGenerateOneRecurringEntry() throws Exception {
-        fakeTaskDBHandler.setTemplatesToReturnInTimeslot(
+        fakeTaskDBHandler.setTemplateDb(
             new ArrayList() {{
                 add(SampleTasksUtil.RECURRING_DAILY_MEETING_TEMPLATE); // start time : 7, interval: 6
         }});
@@ -77,7 +77,7 @@ public class TaskServiceTest {
 
     @Test
     public void shouldFetchGeneratedTemplateAndStoredTemplate() throws Exception {
-        fakeTaskDBHandler.setTemplatesToReturnInTimeslot(
+        fakeTaskDBHandler.setTemplateDb(
             new ArrayList() {{
                 add(SampleTasksUtil.RECURRING_DAILY_MEETING_TEMPLATE); // start time : 7, duration: 2, interval: 6
         }});

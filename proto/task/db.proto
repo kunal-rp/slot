@@ -7,6 +7,13 @@ option java_outer_classname = "TaskDBProto";
 
 import 'proto/task/task.proto';
 
+message DBFetchTemplateRequest {
+	// starting and ending time for template
+	// should query for all templates that could possible fall into timeslot
+	int32 starting_unix = 1;
+	int32 ending_unix = 2;
+}
+
 message DBFetchEntriesRequest {
 	// starting and ending time for entries 
 	// should query for original time + time alterations
