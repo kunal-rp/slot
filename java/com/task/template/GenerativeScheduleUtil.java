@@ -14,7 +14,7 @@ public class GenerativeScheduleUtil {
     * Generates Task Entries whose start timestamps fall in a given time schedule 
     * TODO : Modify s.t. entries that end inside slot are included
     * TODO : update to filter templates pre call 
-    * @param templates all task templates that fall into timeslot
+    * @param templates all task templates that fall into timeslot ( assumption is that templates are already filterd )
     * @param scheduleStartTimestamp starting timestamp of schedule slot
     * @param scheduleEndTimestamp starting timestamp of schedule slot
     * @return List<TaskEntry> 
