@@ -233,8 +233,6 @@ public class TaskServiceTest {
     }
 
 
-
-
     //Test Mainly for fake handler logic 
     @Test
     public void shouldFetchNoTemplatesOrEntries() throws Exception {

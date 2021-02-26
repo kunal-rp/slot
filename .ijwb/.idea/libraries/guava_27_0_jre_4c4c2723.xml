@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="guava-27.0-jre_4c4c2723">
+    <CLASSES>
+      <root url="jar:///private/var/tmp/_bazel_kunal/7f05ac5fbb332b788011f82724633b02/external/maven/v1/https/jcenter.bintray.com/com/google/guava/guava/27.0-jre/guava-27.0-jre.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

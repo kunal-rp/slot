@@ -42,9 +42,13 @@ public class TaskServiceImpl extends TaskServiceGrpc.TaskServiceImplBase {
         this.scheduleUtil = scheduleUtil;
     }
 
+
+
     @Override
     public void generateSchedule(GenerateScheduleRequest req,
             StreamObserver<GenerateScheduleResponse> responseObserver) {
+
+        System.out.println("generateSchedule");
 
         Executor executor = MoreExecutors.newDirectExecutorService();
 
@@ -211,13 +215,12 @@ public class TaskServiceImpl extends TaskServiceGrpc.TaskServiceImplBase {
 
      @Override
     public void updateTemplate(UpdateTemplateRequest req, StreamObserver<UpdateTemplateResponse> responseObserver){
-
          try {
-            ListenableFuture<Void> updateTemplateFuture = 
+            ListenableFuture<Void> updateTemplateFuture =
                 taskDBHandler.alterTemplate(
-                    req.getTemplateId(), 
-                    (req.getEndTimestamp() == 0 ? Optional.empty() : Optional.of(req.getEndTimestamp())), 
-                    (req.getDescription().isEmpty() ? Optional.empty() : Optional.of(req.getDescription())), 
+                    req.getTemplateId(),
+                    (req.getEndTimestamp() == 0 ? Optional.empty() : Optional.of(req.getEndTimestamp())),
+                    (req.getDescription().isEmpty() ? Optional.empty() : Optional.of(req.getDescription())),
                     (req.getDataCollectionIdList().isEmpty() ? Optional.empty() : Optional.of(req.getDataCollectionIdList())));
 
               updateTemplateFuture.addListener(new Runnable() {

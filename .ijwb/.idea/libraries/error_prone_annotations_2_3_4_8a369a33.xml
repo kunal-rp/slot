@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="error_prone_annotations-2.3.4_8a369a33">
+    <CLASSES>
+      <root url="jar:///private/var/tmp/_bazel_kunal/7f05ac5fbb332b788011f82724633b02/external/com_google_errorprone_error_prone_annotations/error_prone_annotations-2.3.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

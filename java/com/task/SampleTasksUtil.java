@@ -1,4 +1,4 @@
-package com.task;
+ package com.task;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -144,7 +144,7 @@ public class SampleTasksUtil {
             // no template id 
             .setStartTimestamp(8)
             .setDuration(3) 
-            .setStatus(TaskEntry.TaskStatus.IN_PROGRESS)
+            .setStatus(TaskEntry.TaskStatus.ACTIVE)
             .build();
 
     public static List<TaskTemplate> PROD_TEMPLATES = new ArrayList<TaskTemplate>(){{

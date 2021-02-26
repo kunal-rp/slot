@@ -70,8 +70,8 @@ message TaskEntry {
     DataCollectionValue data_collection_value = 10;
 
     enum TaskStatus {
-        IN_PROGRESS = 0;
-        FINISHED = 1;
+        ACTIVE = 0;
+        COMPLETED = 1;
         INCOMPLETE = 2;
     }
     TaskStatus status = 11; 

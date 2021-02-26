@@ -4,12 +4,14 @@ metadata:
   name: task
   namespace: slot
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: task
   template:
     metadata:
+      annotations:
+        linkerd.io/inject: enabled
       labels:
         app: task
     spec:
