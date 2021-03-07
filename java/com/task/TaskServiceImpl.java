@@ -21,6 +21,8 @@ import com.task.template.GenerativeScheduleUtil;
 import com.task.db.TaskDBHandler;
 import com.task.TaskServiceProto.GenerateScheduleRequest;
 import com.task.TaskServiceProto.GenerateScheduleResponse;
+import com.task.TaskServiceProto.GeneratePendingTasksRequest;
+import com.task.TaskServiceProto.GeneratePendingTasksResponse;
 import com.task.TaskServiceProto.CreateNewTemplatesRequest;
 import com.task.TaskServiceProto.CreateNewTemplatesResponse;
 import com.task.TaskServiceProto.UpdateTemplateRequest;
@@ -43,6 +45,37 @@ public class TaskServiceImpl extends TaskServiceGrpc.TaskServiceImplBase {
     }
 
 
+    @Override
+    public void generatePendingTasks(GeneratePendingTasksRequest req, StreamObserver<GeneratePendingTasksResponse> responseObserver) {
+        int startTime = (int) req.getScheduleStartUnix();
+        int endTime = (int) req.getScheduleEndUnix();
+        Executor executor = MoreExecutors.newDirectExecutorService();
+
+        ListenableFuture<List<TaskEntry>> entriesInTimeslotFuture = taskDBHandler.fetchEntries(
+                DBFetchEntriesRequest.newBuilder()
+                        .setIncludeTimeAlterations(true)
+                        .setStartingUnix(startTime)
+                        .setEndingUnix(endTime)
+                        .build());
+        ListenableFuture<List<TaskEntry>> incompleteTasksFuture = filterForIncompleteState(entriesInTimeslotFuture, executor);
+
+        try {
+            responseObserver.onNext(
+                    GeneratePendingTasksResponse.newBuilder()
+                            .addAllPendingTaskEntry(
+                                    incompleteTasksFuture.get())
+                            .build());
+        }catch(Exception e){
+            Status status = Status.newBuilder()
+                    .setCode(Code.UNKNOWN.getNumber())
+                    .setMessage("something bad happened - pending")
+                    .build();
+            responseObserver.onError(StatusProto.toStatusRuntimeException(status));
+
+        }
+        responseObserver.onCompleted();
+
+    }
 
     @Override
     public void generateSchedule(GenerateScheduleRequest req,
@@ -92,7 +125,7 @@ public class TaskServiceImpl extends TaskServiceGrpc.TaskServiceImplBase {
         }catch(Exception e){
             Status status = Status.newBuilder()
                 .setCode(Code.UNKNOWN.getNumber())
-                .setMessage("something bad happened")
+                .setMessage("something bad happened - generate")
                 .build();
             responseObserver.onError(StatusProto.toStatusRuntimeException(status));
 
@@ -184,6 +217,24 @@ public class TaskServiceImpl extends TaskServiceGrpc.TaskServiceImplBase {
                };
             return Futures.whenAllSucceed(generatedEntriesFuture, correspondingEntriesFuture)
                    .call(filterAndCombineCallable, executor);
+    }
+
+    // need to filter out all task entries that are INCOMPLETE status
+    private ListenableFuture<List<TaskEntry>> filterForIncompleteState(
+            ListenableFuture<List<TaskEntry>> taskEntriesFuture,
+            Executor executor){
+
+        Callable<List<TaskEntry>> filterCallable =
+                new Callable<List<TaskEntry>>() {
+                    public List<TaskEntry> call() throws Exception {
+                        return taskEntriesFuture.get()
+                                .stream()
+                                .filter(entry -> entry.getStatus() == TaskEntry.TaskStatus.INCOMPLETE)
+                                .collect(toList());
+                    }
+                };
+        return Futures.whenAllSucceed(taskEntriesFuture)
+                .call(filterCallable, executor);
     }
 
     private boolean entryFallsInTimeslot(TaskEntry entry, int startTime, int endTime){

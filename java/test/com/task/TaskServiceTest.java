@@ -24,6 +24,8 @@ import com.task.TaskProto.TimeAlteractionPolicy;
 import com.task.TaskServiceProto.GenerateScheduleRequest;
 import com.task.TaskServiceProto.GenerateScheduleResponse;
 import com.task.TaskServiceProto.CreateNewTemplatesRequest;
+import com.task.TaskServiceProto.GeneratePendingTasksRequest;
+import com.task.TaskServiceProto.GeneratePendingTasksResponse;
 import com.task.TaskServiceProto.CreateNewTemplatesResponse;
 import com.task.TaskServiceProto.UpdateTemplateRequest;
 import com.task.TaskServiceProto.UpdateTemplateResponse;
@@ -282,6 +284,39 @@ public class TaskServiceTest {
         //only alter end timestamp
         assertEquals(Iterables.getOnlyElement(fakeTaskDBHandler.getTemplateDb()).getTimeConfiguration().getEndTimestamp(),101);
         assertEquals(Iterables.getOnlyElement(fakeTaskDBHandler.getTemplateDb()).getDetails(),SampleTasksUtil.RECURRING_DAILY_MEETING_TEMPLATE.getDetails());
+    }
+
+    @Test
+    public void shouldGetPendingTaskEntries() throws Exception {
+
+        fakeTaskDBHandler.setEntryDb(new ArrayList() {{
+            add(
+                    TaskEntry.newBuilder()
+                            .setEntryId(11)
+                            // no template id
+                            .setStartTimestamp(2)
+                            .setDuration(3)
+                            .setStatus(TaskEntry.TaskStatus.ACTIVE)
+                            .build());
+            add(
+                    TaskEntry.newBuilder()
+                            .setEntryId(12)
+                            // no template id
+                            .setStartTimestamp(2)
+                            .setDuration(3)
+                            .setStatus(TaskEntry.TaskStatus.INCOMPLETE)
+                            .build());
+        }});
+
+        TaskServiceGrpc.TaskServiceBlockingStub blockingStub = createBlockingStub();
+        GeneratePendingTasksResponse response =
+                blockingStub.generatePendingTasks(
+                        GeneratePendingTasksRequest.newBuilder()
+                                .setScheduleEndUnix(1)
+                                .setScheduleEndUnix(2)
+                                .build());
+
+        assertEquals(Iterables.getOnlyElement(response.getPendingTaskEntryList()).getEntryId(), 12);
     }
 
     private TaskServiceGrpc.TaskServiceBlockingStub createBlockingStub() throws Exception{
