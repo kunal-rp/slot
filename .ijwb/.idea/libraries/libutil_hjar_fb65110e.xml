@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="libutil-hjar_fb65110e">
+    <CLASSES>
+      <root url="jar:///private/var/tmp/_bazel_kunal/7f05ac5fbb332b788011f82724633b02/execroot/demo_proto_and_java/bazel-out/darwin-fastbuild/bin/external/com_google_protobuf/java/util/libutil-hjar.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

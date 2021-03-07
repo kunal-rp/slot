@@ -18,9 +18,14 @@ import com.google.inject.Injector;
 import com.google.inject.Guice;
 import com.google.common.collect.Iterables;
 import com.task.TaskServiceGrpc;
+import com.task.TaskProto.TaskTemplate;
+import com.task.TaskProto.TaskEntry;
+import com.task.TaskProto.TimeAlteractionPolicy;
 import com.task.TaskServiceProto.GenerateScheduleRequest;
 import com.task.TaskServiceProto.GenerateScheduleResponse;
 import com.task.TaskServiceProto.CreateNewTemplatesRequest;
+import com.task.TaskServiceProto.GeneratePendingTasksRequest;
+import com.task.TaskServiceProto.GeneratePendingTasksResponse;
 import com.task.TaskServiceProto.CreateNewTemplatesResponse;
 import com.task.TaskServiceProto.UpdateTemplateRequest;
 import com.task.TaskServiceProto.UpdateTemplateResponse;
@@ -58,8 +63,8 @@ public class TaskServiceTest {
 
 
     @Test
-    public void shouldGenerateOneRecurringEntry() throws Exception {
-        fakeTaskDBHandler.setTemplatesToReturnInTimeslot(
+    public void shouldReturnOneRecurringGeneratedEntry() throws Exception {
+        fakeTaskDBHandler.setTemplateDb(
             new ArrayList() {{
                 add(SampleTasksUtil.RECURRING_DAILY_MEETING_TEMPLATE); // start time : 7, interval: 6
         }});
@@ -73,11 +78,142 @@ public class TaskServiceTest {
                     .build());
 
         assertEquals(response.getGeneratedTaskEntryCount(), 1);
+        assertEquals(response.getGeneratedTaskEntry(0).getGeneratedEntryId(), 1001);
     }
 
     @Test
-    public void shouldFetchGeneratedTemplateAndStoredTemplate() throws Exception {
-        fakeTaskDBHandler.setTemplatesToReturnInTimeslot(
+    public void shouldReturnOneEntry_onlyStored() throws Exception {
+        TaskTemplate template = SampleTasksUtil.RECURRING_DAILY_MEETING_TEMPLATE;
+        fakeTaskDBHandler.setTemplateDb(
+            new ArrayList() {{
+                add(template); // start time : 7, duration: 2, interval: 6
+        }});
+
+        fakeTaskDBHandler.setEntryDb(new ArrayList() {{
+                add(
+                    TaskEntry.newBuilder()
+                        .setEntryId(12345)
+                        .setTemplateId(template.getTemplateId())
+                        .setOccurance(1)
+                        .setStartTimestamp(template.getTimeConfiguration().getStartTimestamp())
+                        .build());
+        }});
+
+        TaskServiceGrpc.TaskServiceBlockingStub blockingStub = createBlockingStub();
+        GenerateScheduleResponse response =
+                blockingStub.generateSchedule(
+                    GenerateScheduleRequest.newBuilder()
+                        .setScheduleStartUnix(6)
+                        .setScheduleEndUnix(9)
+                    .build());
+
+        assertEquals(response.getGeneratedTaskEntryCount(), 1);
+        assertEquals(response.getGeneratedTaskEntry(0).getEntryId(), 12345);
+    }
+
+    @Test
+    public void shouldReturnTwoEntry_onlyStored() throws Exception {
+        TaskTemplate template = SampleTasksUtil.RECURRING_DAILY_MEETING_TEMPLATE;
+        fakeTaskDBHandler.setTemplateDb(
+            new ArrayList() {{
+                add(template); // start time : 7, duration: 2, interval: 6
+        }});
+
+        fakeTaskDBHandler.setEntryDb(new ArrayList() {{
+                add(
+                    TaskEntry.newBuilder()
+                        .setEntryId(12345)
+                        .setTemplateId(template.getTemplateId())
+                        .setOccurance(1)
+                        .setStartTimestamp(template.getTimeConfiguration().getStartTimestamp())
+                        .build());
+                 add(
+                    TaskEntry.newBuilder()
+                        .setEntryId(67890)
+                        .setTemplateId(template.getTemplateId())
+                        .setOccurance(2)
+                        .setStartTimestamp(template.getTimeConfiguration().getStartTimestamp() + template.getTimeConfiguration().getIntervalSeconds())
+                        .build());
+        }});
+
+        TaskServiceGrpc.TaskServiceBlockingStub blockingStub = createBlockingStub();
+        GenerateScheduleResponse response =
+                blockingStub.generateSchedule(
+                    GenerateScheduleRequest.newBuilder()
+                        .setScheduleStartUnix(6)
+                        .setScheduleEndUnix(14)
+                    .build());
+
+        assertEquals(response.getGeneratedTaskEntryCount(), 2);
+        assertEquals(response.getGeneratedTaskEntry(0).getEntryId(), 12345);
+        assertEquals(response.getGeneratedTaskEntry(1).getEntryId(), 67890);
+    }
+
+    @Test
+    public void shouldNotReturnAnyEntries_occuranceEntryWithUpdatedTime() throws Exception {
+        TaskTemplate template = SampleTasksUtil.RECURRING_DAILY_MEETING_TEMPLATE;
+        fakeTaskDBHandler.setTemplateDb(
+            new ArrayList() {{
+                add(template); // start time : 7, duration: 2, interval: 6
+        }});
+
+        fakeTaskDBHandler.setEntryDb(new ArrayList() {{
+                add(
+                    TaskEntry.newBuilder()
+                        .setTemplateId(template.getTemplateId())
+                        .setOccurance(1)
+                        .setStartTimestamp(template.getTimeConfiguration().getStartTimestamp())
+                        .setTimeAlterations(
+                            TimeAlteractionPolicy.newBuilder()
+                                .setStartTimestampSurplus(10))
+                        .build());
+        }});
+
+        TaskServiceGrpc.TaskServiceBlockingStub blockingStub = createBlockingStub();
+        GenerateScheduleResponse response =
+                blockingStub.generateSchedule(
+                    GenerateScheduleRequest.newBuilder()
+                        .setScheduleStartUnix(6)
+                        .setScheduleEndUnix(9)
+                    .build());
+
+        assertEquals(response.getGeneratedTaskEntryCount(), 0);
+    }
+
+    @Test
+    public void shouldReturnOneEntryandOneStoredEntry_relatedEntries() throws Exception {
+        TaskTemplate template = SampleTasksUtil.RECURRING_DAILY_MEETING_TEMPLATE;
+        fakeTaskDBHandler.setTemplateDb(
+            new ArrayList() {{
+                add(template); // start time : 7, duration: 2, interval: 6
+        }});
+
+        fakeTaskDBHandler.setEntryDb(new ArrayList() {{
+                 add(
+                    TaskEntry.newBuilder()
+                        .setEntryId(67890)
+                        .setTemplateId(template.getTemplateId())
+                        .setOccurance(2)
+                        .setStartTimestamp(template.getTimeConfiguration().getStartTimestamp() + template.getTimeConfiguration().getIntervalSeconds())
+                        .build());
+        }});
+
+        TaskServiceGrpc.TaskServiceBlockingStub blockingStub = createBlockingStub();
+        GenerateScheduleResponse response =
+                blockingStub.generateSchedule(
+                    GenerateScheduleRequest.newBuilder()
+                        .setScheduleStartUnix(6)
+                        .setScheduleEndUnix(14)
+                    .build());
+
+        assertEquals(response.getGeneratedTaskEntryCount(), 2);
+        assertEquals(response.getGeneratedTaskEntry(1).getGeneratedEntryId(),1001 );
+        assertEquals(response.getGeneratedTaskEntry(0).getEntryId(), 67890);
+    }
+
+    @Test
+    public void shouldReturnOneEntryandOneStoredEntry_unrelatedEntries() throws Exception {
+        fakeTaskDBHandler.setTemplateDb(
             new ArrayList() {{
                 add(SampleTasksUtil.RECURRING_DAILY_MEETING_TEMPLATE); // start time : 7, duration: 2, interval: 6
         }});
@@ -95,7 +231,9 @@ public class TaskServiceTest {
                     .build());
 
         assertEquals(response.getGeneratedTaskEntryCount(), 2);
+        assertEquals(response.getGeneratedTaskEntry(1).getEntryId(), SampleTasksUtil.ONE_TIME_INDIVIDUAL_IP_ENTRY.getEntryId());
     }
+
 
     //Test Mainly for fake handler logic 
     @Test
@@ -146,6 +284,39 @@ public class TaskServiceTest {
         //only alter end timestamp
         assertEquals(Iterables.getOnlyElement(fakeTaskDBHandler.getTemplateDb()).getTimeConfiguration().getEndTimestamp(),101);
         assertEquals(Iterables.getOnlyElement(fakeTaskDBHandler.getTemplateDb()).getDetails(),SampleTasksUtil.RECURRING_DAILY_MEETING_TEMPLATE.getDetails());
+    }
+
+    @Test
+    public void shouldGetPendingTaskEntries() throws Exception {
+
+        fakeTaskDBHandler.setEntryDb(new ArrayList() {{
+            add(
+                    TaskEntry.newBuilder()
+                            .setEntryId(11)
+                            // no template id
+                            .setStartTimestamp(2)
+                            .setDuration(3)
+                            .setStatus(TaskEntry.TaskStatus.ACTIVE)
+                            .build());
+            add(
+                    TaskEntry.newBuilder()
+                            .setEntryId(12)
+                            // no template id
+                            .setStartTimestamp(2)
+                            .setDuration(3)
+                            .setStatus(TaskEntry.TaskStatus.INCOMPLETE)
+                            .build());
+        }});
+
+        TaskServiceGrpc.TaskServiceBlockingStub blockingStub = createBlockingStub();
+        GeneratePendingTasksResponse response =
+                blockingStub.generatePendingTasks(
+                        GeneratePendingTasksRequest.newBuilder()
+                                .setScheduleEndUnix(1)
+                                .setScheduleEndUnix(2)
+                                .build());
+
+        assertEquals(Iterables.getOnlyElement(response.getPendingTaskEntryList()).getEntryId(), 12);
     }
 
     private TaskServiceGrpc.TaskServiceBlockingStub createBlockingStub() throws Exception{

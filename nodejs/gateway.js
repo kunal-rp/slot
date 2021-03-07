@@ -15,12 +15,19 @@ app.get('/', (req, res) => {
   res.send('this is the GATEWAY!')
 })
 
-var testRequest = new taskProto.GenerateScheduleRequest().setScheduleStartUnix(1610240520) // 1/10/21
-                    .setScheduleEndUnix(1612915200); // 2/10/21
+var startTimeUnix = 1610240520 // 1/10/21
+var endTimeUnix = () => startTimeUnix + (getRand(15, 40) * 86400 )+ (getRand(0, 24) * 3600 )
+var genRequest = () => new taskProto.GenerateScheduleRequest()
+                .setScheduleStartUnix(startTimeUnix)
+                    .setScheduleEndUnix(endTimeUnix());
+console.log(endTimeUnix)
 
 app.get('/testgrpc', (req, res) => {
   console.log("testgrpc recieved")
-    client.generateSchedule(testRequest, (err, data) => {
+    var request = genRequest()
+    console.log(request)
+    console.log(new Date(request.getScheduleEndUnix() * 1000))
+    client.generateSchedule(request, (err, data) => {
       if(err){
         res.json({err: err})
         return
@@ -36,4 +43,8 @@ app.listen(port, () => {
 
 
 
+
+function getRand(min, max) {
+  return Math.trunc(Math.random() * (max - min) + min);
+}
 

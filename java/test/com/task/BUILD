@@ -3,7 +3,7 @@ load("//:java/test/java_testing_generator.bzl", "java_unit_test")
 package(default_visibility = ["//visibility:public"])
 
 java_unit_test(
-    name = "generative_schedule_util_test",
+    name = "task_tests",
     pkg="com.task",
     srcs = glob(["*.java"]),
     deps = [

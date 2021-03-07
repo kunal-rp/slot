@@ -8,4 +8,5 @@ bazel-vagrant
 bazel-bazel-example
 .vagrant/
 Vagrantfile
-.idea/
+.idea/**
+*.iml

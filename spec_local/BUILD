@@ -24,6 +24,14 @@ k8s_object(
 )
 
 k8s_object(
+  name = "controller_linkerd",
+  template = ":linkerd_controller.yaml",
+  kubeconfig = ":config",
+  cluster = "minikube",
+  kind = "deployment"
+)
+
+k8s_object(
   name = "service_gateway",
   template = ":service_gateway.yaml",
   kubeconfig = ":config",
@@ -66,8 +74,15 @@ k8s_objects(
 k8s_objects(
     name = "k8s",
     objects = [
-    ":ns_slot",
-      ":deployment_task",
-      ":services",
+        ":ns_slot",
+        ":deployment_task",
+        ":services",
+    ]
+)
+
+k8s_objects(
+    name = "controllers",
+    objects = [
+        ":controller_linkerd"
     ]
 )

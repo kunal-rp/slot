@@ -14,6 +14,8 @@ service TaskService {
   rpc CreateNewTemplates (CreateNewTemplatesRequest) returns (CreateNewTemplatesResponse);
 
   rpc UpdateTemplate (UpdateTemplateRequest) returns (UpdateTemplateResponse);
+
+	rpc GeneratePendingTasks (GeneratePendingTasksRequest) returns (GeneratePendingTasksResponse);
 }
 
 message GenerateScheduleRequest {
@@ -44,4 +46,13 @@ message UpdateTemplateRequest{
 
 message UpdateTemplateResponse{
 
+}
+
+message GeneratePendingTasksRequest {
+	int64 schedule_start_unix = 1;
+	int64 schedule_end_unix = 2;
+}
+
+message GeneratePendingTasksResponse{
+	repeated task.TaskEntry pending_task_entry = 1;
 }
