@@ -48,6 +48,14 @@ k8s_object(
 )
 
 k8s_object(
+  name = "ingress",
+  template = ":ingress.yaml",
+  kubeconfig = ":config",
+  cluster = "minikube",
+  kind = "ingress"
+)
+
+k8s_object(
   name = "ns_slot",
   template = ":ns_slot.yaml",
   kubeconfig = ":config",
@@ -77,6 +85,7 @@ k8s_objects(
         ":ns_slot",
         ":deployment_task",
         ":services",
+        ":ingress"
     ]
 )
 
