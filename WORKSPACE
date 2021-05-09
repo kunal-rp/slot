@@ -1,7 +1,10 @@
 workspace(name = "demo_proto_and_java" ,
     # Map the @npm bazel workspace to the node_modules directory.
     # This lets Bazel use the same node_modules as other local tooling.
-    managed_directories = {"@nodejs_modules": ["node_modules"]})
+    managed_directories = {
+        "@nodejs_modules": ["nodejs/node_modules"],
+        "@frapp_modules": ["frontend/app/node_modules"]
+        })
 
 # functions to get external libs
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
@@ -117,6 +120,12 @@ npm_install(
     name = "nodejs_modules",
     package_json = "//nodejs:package.json",
     package_lock_json = "//nodejs:package-lock.json",
+)
+
+yarn_install(
+    name = "frapp_modules",
+    package_json = "//frontend/app:package.json",
+    yarn_lock = "//frontend/app:yarn.lock"
 )
 
 # Load nodejs_image rules to create java docker images to run grpc services
