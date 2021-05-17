@@ -6,6 +6,10 @@ bazel-out
 bazel-testlogs
 bazel-vagrant
 bazel-bazel-example
+
+bazel-slot
+
+
 .vagrant/
 Vagrantfile
 .idea/**
