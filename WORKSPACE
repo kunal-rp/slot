@@ -1,4 +1,4 @@
-workspace(name = "demo_proto_and_java" ,
+workspace(name = "slot" ,
     # Map the @npm bazel workspace to the node_modules directory.
     # This lets Bazel use the same node_modules as other local tooling.
     managed_directories = {
@@ -108,9 +108,15 @@ docker_toolchain_configure(
 )
 
 
-#nodejs - already installed from proto grpc 
 load("@rules_proto_grpc//nodejs:repositories.bzl", rules_proto_grpc_nodejs_repos="nodejs_repos")
 rules_proto_grpc_nodejs_repos()
+
+#installing nodejs rules 
+http_archive(
+    name = "build_bazel_rules_nodejs",
+    sha256 = "65067dcad93a61deb593be7d3d9a32a4577d09665536d8da536d731da5cd15e2",
+    urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/3.4.2/rules_nodejs-3.4.2.tar.gz"],
+)
 
 # The npm_install rule runs yarn anytime the package.json or package-lock.json file changes.
 # It also extracts any Bazel rules distributed in an npm package.
@@ -125,7 +131,8 @@ npm_install(
 yarn_install(
     name = "frapp_modules",
     package_json = "//frontend/app:package.json",
-    yarn_lock = "//frontend/app:yarn.lock"
+    yarn_lock = "//frontend/app:yarn.lock",
+    strict_visibility = False
 )
 
 # Load nodejs_image rules to create java docker images to run grpc services
