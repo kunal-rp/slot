@@ -9,7 +9,6 @@ bazel-bazel-example
 
 bazel-slot
 
-
 .vagrant/
 Vagrantfile
 .idea/**

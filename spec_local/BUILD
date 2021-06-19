@@ -24,6 +24,17 @@ k8s_object(
 )
 
 k8s_object(
+  name = "deployment_frapp",
+  kind = "deployment",
+  kubeconfig = ":config",
+  cluster = "minikube",
+  template = ":deployment_frapp.yaml",
+  images = {
+      "krpdkr/slot_frapp": "//frontend/app:prod_image"
+  },
+)
+
+k8s_object(
   name = "controller_linkerd",
   template = ":linkerd_controller.yaml",
   kubeconfig = ":config",
@@ -42,6 +53,14 @@ k8s_object(
 k8s_object(
   name = "service_task",
   template = ":service_task.yaml",
+  kubeconfig = ":config",
+  cluster = "minikube",
+  kind = "service"
+)
+
+k8s_object(
+  name = "service_frapp",
+  template = ":service_frapp.yaml",
   kubeconfig = ":config",
   cluster = "minikube",
   kind = "service"
@@ -68,6 +87,7 @@ k8s_objects(
     objects = [
       ":deployment_gateway",
       ":deployment_task",
+      ":deployment_frapp",
     ]
 )
 
@@ -76,6 +96,7 @@ k8s_objects(
     objects = [
       ":service_gateway",
       ":service_task",
+      ":service_frapp",
     ]
 )
 
@@ -84,6 +105,7 @@ k8s_objects(
     objects = [
         ":ns_slot",
         ":deployment_task",
+        ":deployment_frapp",
         ":services",
         ":ingress"
     ]

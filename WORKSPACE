@@ -131,8 +131,7 @@ npm_install(
 yarn_install(
     name = "frapp_modules",
     package_json = "//frontend/app:package.json",
-    yarn_lock = "//frontend/app:yarn.lock",
-    strict_visibility = False
+    yarn_lock = "//frontend/app:yarn.lock"
 )
 
 # Load nodejs_image rules to create java docker images to run grpc services
@@ -141,6 +140,17 @@ load(
     _nodejs_image_repos = "repositories",
 )
 _nodejs_image_repos()
+
+
+# nginx docker base image
+load("@io_bazel_rules_docker//container:pull.bzl", "container_pull")
+
+container_pull(
+    name = "nginx_base",
+    registry = "index.docker.io",
+    repository = "library/nginx",
+    tag = "1.21.0-alpine",
+)
 
 # k8s - push images directly to cluster 
 http_archive(

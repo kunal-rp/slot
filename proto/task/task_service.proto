@@ -15,7 +15,7 @@ service TaskService {
 
   rpc UpdateTemplate (UpdateTemplateRequest) returns (UpdateTemplateResponse);
 
-	rpc GeneratePendingTasks (GeneratePendingTasksRequest) returns (GeneratePendingTasksResponse);
+  rpc GeneratePendingTasks (GeneratePendingTasksRequest) returns (GeneratePendingTasksResponse);
 }
 
 message GenerateScheduleRequest {

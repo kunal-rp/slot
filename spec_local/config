@@ -239,3 +239,131 @@ users:
   user:
     client-certificate: /Users/kunal/.minikube/profiles/minikube/client.crt
     client-key: /Users/kunal/.minikube/profiles/minikube/client.key
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /Users/kunal/.minikube/ca.crt
+    extensions:
+    - extension:
+        last-update: Sat, 12 Jun 2021 02:14:35 PDT
+        provider: minikube.sigs.k8s.io
+        version: v1.18.1
+      name: cluster_info
+    server: https://127.0.0.1:61109
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    extensions:
+    - extension:
+        last-update: Sat, 12 Jun 2021 02:14:35 PDT
+        provider: minikube.sigs.k8s.io
+        version: v1.18.1
+      name: context_info
+    namespace: default
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+preferences: {}
+users:
+- name: minikube
+  user:
+    client-certificate: /Users/kunal/.minikube/profiles/minikube/client.crt
+    client-key: /Users/kunal/.minikube/profiles/minikube/client.key
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /Users/kunal/.minikube/ca.crt
+    extensions:
+    - extension:
+        last-update: Sat, 12 Jun 2021 02:39:59 PDT
+        provider: minikube.sigs.k8s.io
+        version: v1.18.1
+      name: cluster_info
+    server: https://127.0.0.1:62393
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    extensions:
+    - extension:
+        last-update: Sat, 12 Jun 2021 02:39:59 PDT
+        provider: minikube.sigs.k8s.io
+        version: v1.18.1
+      name: context_info
+    namespace: default
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+preferences: {}
+users:
+- name: minikube
+  user:
+    client-certificate: /Users/kunal/.minikube/profiles/minikube/client.crt
+    client-key: /Users/kunal/.minikube/profiles/minikube/client.key
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /Users/kunal/.minikube/ca.crt
+    extensions:
+    - extension:
+        last-update: Mon, 14 Jun 2021 15:28:36 PDT
+        provider: minikube.sigs.k8s.io
+        version: v1.18.1
+      name: cluster_info
+    server: https://127.0.0.1:57855
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    extensions:
+    - extension:
+        last-update: Mon, 14 Jun 2021 15:28:36 PDT
+        provider: minikube.sigs.k8s.io
+        version: v1.18.1
+      name: context_info
+    namespace: default
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+preferences: {}
+users:
+- name: minikube
+  user:
+    client-certificate: /Users/kunal/.minikube/profiles/minikube/client.crt
+    client-key: /Users/kunal/.minikube/profiles/minikube/client.key
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /Users/kunal/.minikube/ca.crt
+    extensions:
+    - extension:
+        last-update: Fri, 18 Jun 2021 20:43:09 PDT
+        provider: minikube.sigs.k8s.io
+        version: v1.18.1
+      name: cluster_info
+    server: https://127.0.0.1:51805
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    extensions:
+    - extension:
+        last-update: Fri, 18 Jun 2021 20:43:09 PDT
+        provider: minikube.sigs.k8s.io
+        version: v1.18.1
+      name: context_info
+    namespace: default
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+preferences: {}
+users:
+- name: minikube
+  user:
+    client-certificate: /Users/kunal/.minikube/profiles/minikube/client.crt
+    client-key: /Users/kunal/.minikube/profiles/minikube/client.key
