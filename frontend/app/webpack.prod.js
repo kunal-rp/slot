@@ -1,16 +1,22 @@
 const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 
+const fs = require('fs');
+
 module.exports = {
   mode: 'production',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
   },
   resolve: {
-    modules: [path.join(process.cwd(), 'external/frapp_modules/node_modules')],
+    modules: [
+      path.join(process.cwd(), 'external/frapp_modules/node_modules'),
+     ],
   },
-  entry : path.join(process.cwd(), "frontend/app/src/index.js"),
+  entry : {
+    index: [path.join(process.cwd(), "frontend/app/src/index.js")],
+  },
   module: {
     rules: [
       {
@@ -36,6 +42,6 @@ module.exports = {
   plugins: [
     new HtmlWebPackPlugin({
       template: './frontend/app/src/index.html',
-    }),
+    })
   ],
 };

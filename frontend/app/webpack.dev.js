@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   output: {
@@ -35,6 +36,11 @@ module.exports = {
   plugins: [
     new HtmlWebPackPlugin({
       template: './frontend/app/src/index.html',
+    }),
+     new CopyPlugin({
+      patterns: [
+        { from: path.join(process.cwd(), "proto/task/task_nodejs_service_proto_pb/proto/task/*.js"), to: path.join(process.cwd(), "frontend/app/src/") },
+      ],
     }),
   ],
 };

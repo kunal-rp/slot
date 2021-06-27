@@ -4,7 +4,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-//const TASK_PROTO_PATH = process.cwd()+'/proto/task/task_nodejs_service_proto_pb/proto/task';
+const TASK_PROTO_PATH = process.cwd()+'/proto/task/task_nodejs_service_proto_pb/proto/task';
 
 const taskServiceProto = require(TASK_PROTO_PATH+'/task_service_grpc_pb.js')
 const taskProto = require(TASK_PROTO_PATH+'/task_service_pb.js')

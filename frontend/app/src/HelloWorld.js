@@ -3,20 +3,16 @@ import Button from '@material-ui/core/Button';
 
 import Employee from './Employee';
 
-const TASK_PROTO_PATH = '/proto/task/task_nodejs_service_proto_pb';
-const test = "123"
-const taskServiceProto = require(TASK_PROTO_PATH+'/task_service_grpc_pb.js')
-const taskProto = require(TASK_PROTO_PATH+'/task_service_pb.js')
+//import GenerateScheduleRequest from './generateschedulerequest';
+//const taskServiceProto = require('taskGrpc/task_service_grpc_pb.js')
 
-console.log("startup");
-console.log("startup");
-
-var client = new taskServiceProto.TaskServiceClient("task:80", grpc.credentials.createInsecure()); 
+//var client = new taskServiceProto.TaskServiceClient("task:80", grpc.credentials.createInsecure()); 
 
 const HelloWorld = () => {
 
 	const [employeeList, setEmployeeList] = useState("");
 
+	/*
 	useEffect(() => {
 
 		var startTimeUnix = 1610240520 // 1/10/21
@@ -34,6 +30,8 @@ const HelloWorld = () => {
 		      setEmployeeList(data.toObject().toString())
 		    })
 	});
+	{employeeList.map(emp => <Employee name={emp.employee_name}/>)}
+	*/
 
 
   return (
@@ -43,7 +41,7 @@ const HelloWorld = () => {
 		     	Hello World
 		   	</Button>
 		   	<div>
-		   	{employeeList.map(emp => <Employee name={emp.employee_name}/>)}
+		   	
 		   	</div>
 	    </div>
   );
