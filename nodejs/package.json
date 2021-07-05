@@ -16,7 +16,9 @@
         "@grpc/grpc-js": "1.1.7",
         "express": "^4.17.1",
         "fs": "^0.0.1-security",
-        "google-protobuf": "3.13.0",
-        "grpc-tools": "1.9.1"
+        "google-protobuf": "^3.17.3",
+        "grpc-tools": "1.9.1",
+        "grpc-web": "1.2.1",
+        "ts-protoc-gen": "^0.15.0"
     }
 }

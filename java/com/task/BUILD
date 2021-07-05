@@ -44,7 +44,7 @@ java_library(
     name = "task_service_impl",
     srcs = ["TaskServiceImpl.java"],
     deps = [
-        "@maven//:com_google_inject_guice",
+        "@maven2//:com_google_inject_guice",
         "@io_grpc_grpc_java//api",
         "@com_google_api_grpc_proto_google_common_protos//:com_google_api_grpc_proto_google_common_protos",
         ":task_handler",
@@ -60,7 +60,7 @@ java_image(
     name = "task_java_image",
      srcs = ["TaskService.java"],
      deps = [
-        "@maven//:com_google_inject_guice",
+        "@maven2//:com_google_inject_guice",
         "@io_grpc_grpc_java//api",
         ":task_service_impl",
         ":sample_tasks_util",
