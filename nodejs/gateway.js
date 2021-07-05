@@ -4,7 +4,6 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-
 const taskServiceProto = require('./task_nodejs_service_proto_pb/proto/task/task_service_grpc_pb.js')
 const taskProto = require('./task_nodejs_service_proto_pb/proto/task/task_service_pb.js')
 

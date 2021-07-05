@@ -1,7 +1,9 @@
 workspace(name = "demo_proto_and_java" ,
     # Map the @npm bazel workspace to the node_modules directory.
     # This lets Bazel use the same node_modules as other local tooling.
-    managed_directories = {"@nodejs_modules": ["node_modules"]})
+    managed_directories = {
+        "@nodejs_modules": ["node_modules"],
+        })
 
 # functions to get external libs
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
@@ -21,13 +23,18 @@ rules_java_toolchains()
 # proto - grpc service ( should also get  proto_rules dep )
 http_archive(
     name = "rules_proto_grpc",
-    urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/archive/2.0.0.tar.gz"],
-    sha256 = "d771584bbff98698e7cb3cb31c132ee206a972569f4dc8b65acbdd934d156b33",
-    strip_prefix = "rules_proto_grpc-2.0.0",
+   sha256 = "7954abbb6898830cd10ac9714fbcacf092299fda00ed2baf781172f545120419",
+    strip_prefix = "rules_proto_grpc-3.1.1",
+    urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/archive/3.1.1.tar.gz"],
 )
+
 load("@rules_proto_grpc//:repositories.bzl", "rules_proto_grpc_toolchains", "rules_proto_grpc_repos")
 rules_proto_grpc_toolchains()
 rules_proto_grpc_repos()
+
+load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
+rules_proto_dependencies()
+rules_proto_toolchains()
 
 load("@rules_proto_grpc//java:repositories.bzl", rules_proto_grpc_java_repos="java_repos")
 rules_proto_grpc_java_repos()
@@ -37,8 +44,8 @@ load("@io_grpc_grpc_java//:repositories.bzl", "IO_GRPC_GRPC_JAVA_ARTIFACTS", "IO
 grpc_java_repositories()
 
 # maven_install
-RULES_JVM_EXTERNAL_TAG = "3.3"
-RULES_JVM_EXTERNAL_SHA = "d85951a92c0908c80bd8551002d66cb23c3434409c814179c0ff026b53544dab"
+RULES_JVM_EXTERNAL_TAG = "4.0"
+RULES_JVM_EXTERNAL_SHA = "31701ad93dbfe544d597dbe62c9a1fdd76d81d8a9150c2bf1ecf928ecdf97169"
 
 http_archive(
     name = "rules_jvm_external",
@@ -49,15 +56,29 @@ http_archive(
 
 load("@rules_jvm_external//:defs.bzl", "maven_install")
 
+
+maven_install(
+    artifacts = IO_GRPC_GRPC_JAVA_ARTIFACTS,
+    generate_compat_repositories = True,
+    override_targets = IO_GRPC_GRPC_JAVA_OVERRIDE_TARGETS,
+    repositories = [
+        "https://repo.maven.apache.org/maven2/",
+    ],
+)
+
+load("@maven//:compat.bzl", "compat_repositories")
+
+compat_repositories()
+
 #guice
 #grpc testing
-grpc_version = "1.22.1"
+grpc_version = "1.27.0"
 guice_version = "4.1.0"
 maven_install(
-    name = "maven",
+    name = "maven2",
     artifacts = [
         "io.grpc:grpc-testing:%s" % grpc_version,
-        "com.google.guava:guava:27.0-jre",
+        "com.google.guava:guava:30.0-jre",
         'com.google.inject:guice:' + guice_version,
     ],
     repositories = [
@@ -106,17 +127,24 @@ docker_toolchain_configure(
 
 
 #nodejs - already installed from proto grpc 
-load("@rules_proto_grpc//nodejs:repositories.bzl", rules_proto_grpc_nodejs_repos="nodejs_repos")
-rules_proto_grpc_nodejs_repos()
+load("@rules_proto_grpc//js:repositories.bzl", rules_proto_grpc_js_repos="js_repos")
+rules_proto_grpc_js_repos()
 
 # The npm_install rule runs yarn anytime the package.json or package-lock.json file changes.
 # It also extracts any Bazel rules distributed in an npm package.
-load("@build_bazel_rules_nodejs//:index.bzl", "npm_install","yarn_install")
-npm_install(
+load("@build_bazel_rules_nodejs//:index.bzl","yarn_install")
+yarn_install(
     # Name this npm so that Bazel Label references look like @npm//package
     name = "nodejs_modules",
     package_json = "//nodejs:package.json",
-    package_lock_json = "//nodejs:package-lock.json",
+    yarn_lock = "//nodejs:yarn.lock",
+)
+
+yarn_install(
+    # Name this npm so that Bazel Label references look like @npm//package
+    name = "npm",
+    package_json = "//npm:package.json",
+    yarn_lock = "//npm:yarn.lock",
 )
 
 # Load nodejs_image rules to create java docker images to run grpc services
