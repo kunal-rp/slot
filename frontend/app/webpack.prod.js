@@ -1,7 +1,7 @@
 const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 
-const fs = require('fs');
+
 
 module.exports = {
   mode: 'production',

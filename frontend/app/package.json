@@ -15,10 +15,13 @@
     "copy-webpack-plugin": "^9.0.0",
     "fs": "^0.0.1-security",
     "google-protobuf": "^3.17.3",
+    "grpc-tools": "^1.11.2",
+    "grpc-web": "^1.2.1",
     "http_server": "^1.0.12",
     "process": "^0.11.10",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "ts-protoc-gen": "^0.15.0",
     "webpack-node-externals": "^3.0.0"
   },
   "devDependencies": {
