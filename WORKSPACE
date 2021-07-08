@@ -175,6 +175,14 @@ container_pull(
     tag = "1.21.0-alpine",
 )
 
+#envoy base image
+container_pull(
+    name = "envoy_base",
+    registry = "index.docker.io",
+    repository = "envoyproxy/envoy",
+    tag = "v1.18.3"
+)
+
 # k8s - push images directly to cluster 
 http_archive(
     name = "io_bazel_rules_k8s",

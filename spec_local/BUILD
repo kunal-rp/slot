@@ -35,6 +35,17 @@ k8s_object(
 )
 
 k8s_object(
+  name = "deployment_envoy",
+  kind = "deployment",
+  kubeconfig = ":config",
+  cluster = "minikube",
+  template = ":deployment_envoy.yaml",
+  images = {
+      "krpdkr/slot_envoy": "//frontend/envoy:envoy_image"
+  },
+)
+
+k8s_object(
   name = "controller_linkerd",
   template = ":linkerd_controller.yaml",
   kubeconfig = ":config",
@@ -67,6 +78,14 @@ k8s_object(
 )
 
 k8s_object(
+  name = "service_envoy",
+  template = ":service_envoy.yaml",
+  kubeconfig = ":config",
+  cluster = "minikube",
+  kind = "service"
+)
+
+k8s_object(
   name = "ingress",
   template = ":ingress.yaml",
   kubeconfig = ":config",
@@ -83,11 +102,11 @@ k8s_object(
 )
 
 k8s_objects(
-    name = "deployment",
+    name = "non_nodejs_deployment",
     objects = [
-      ":deployment_gateway",
       ":deployment_task",
       ":deployment_frapp",
+      ":deployment_envoy",
     ]
 )
 
@@ -97,6 +116,7 @@ k8s_objects(
       ":service_gateway",
       ":service_task",
       ":service_frapp",
+      ":service_envoy",
     ]
 )
 
@@ -104,8 +124,7 @@ k8s_objects(
     name = "k8s",
     objects = [
         ":ns_slot",
-        ":deployment_task",
-        ":deployment_frapp",
+        ":non_nodejs_deployment",
         ":services",
         ":ingress"
     ]

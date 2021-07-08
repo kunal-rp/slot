@@ -24,3 +24,10 @@ spec:
                 name: gateway
                 port:
                   number: 3000
+          - path: /gapi/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: envoy
+                port:
+                  number: 80

@@ -41,25 +41,6 @@ filegroup(
     ],
 )
 
-webpack(
-    name = "dev",
-    data = NPM_PACKAGES + [
-        ":srcs",
-        ":task_grpc_js",
-        "src/index.html",
-        "webpack.dev.js",
-        ".babelrc",
-    ],
-    templated_args = [
-    	"serve",
-        "--config",
-        "$(execpath webpack.dev.js)",
-        "--mode",
-        "development",
-        "--open",
-        "--hot"
-    ],
-)
 
 nodejs_binary(
     name = "webpack_cli",
@@ -96,6 +77,7 @@ http_server(
     ],
     # args = ["frontend/app/dist/"],
 )
+
 
 container_image(
     name = "prod_image",
