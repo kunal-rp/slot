@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Button from '@material-ui/core/Button';
-import Employee from './Employee';
+import Task from './Task';
 
 
 console.log("start")
@@ -14,10 +14,9 @@ function getRand(min, max) {
 }
 
 
-
 const HelloWorld = () => {
 
-	const [employeeList, setEmployeeList] = useState([]);
+	const [taskList, setTaskList] = useState([]);
 
 	
 	useEffect(() => {
@@ -36,13 +35,14 @@ const HelloWorld = () => {
 		        return
 		      }
 		      console.log("testgrpc response")
-		      console.log(data)
-		      //setEmployeeList(data.toObject().toString())
+		      setTaskList(data.getGeneratedTaskEntryList())
 		    })
 
 	}
 	
-
+	function getTasks(){
+		return taskList.map(task => <Task task={task}/> )
+	}
 
   return (
   		<div>
@@ -51,7 +51,7 @@ const HelloWorld = () => {
 		     	Hello World
 		   	</Button>
 		   	<div>
-		   	
+		   		{getTasks()}
 		   	</div>
 	    </div>
   );

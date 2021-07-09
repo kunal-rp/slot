@@ -37,7 +37,7 @@ filegroup(
     srcs = [
         "src/index.js",
         "src/HelloWorld.js",
-        "src/Employee.js",
+        "src/Task.js",
     ],
 )
 
@@ -70,12 +70,41 @@ genrule(
   ],
 )
 
+genrule(
+  name = "dev_build",
+  tools = [":webpack_cli"],
+  srcs = NPM_PACKAGES + [
+    ":srcs",
+    "src/index.html",
+    "webpack.dev.js",
+    ".babelrc",
+    ":task_grpc_js"
+  ],
+  cmd = " && ".join([
+    "cp -a bazel-out/darwin-fastbuild/bin/frontend/app/task_grpc_js_pb/ frontend/app/src/",
+    "ls bazel-out/darwin-fastbuild/bin/frontend/app/task_grpc_js_pb/",
+    "$(execpath webpack_cli) --mode=development --config=$(location webpack.dev.js)",
+    "mv frontend/app/devDist $@",
+  ]),
+  outs = [
+    "devDist",
+  ],
+)
+
 http_server(
     name = "prod_server",
     data = [
         ":prod_build"
     ],
     # args = ["frontend/app/dist/"],
+)
+
+http_server(
+    name = "dev_server",
+    data = [
+        ":dev_build"
+    ],
+    args = ["frontend/app/devDist"],
 )
 
 
