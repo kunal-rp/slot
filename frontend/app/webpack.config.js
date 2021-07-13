@@ -1,4 +1,5 @@
 const path = require('path');
+var webpack = require('webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -37,6 +38,9 @@ module.exports = {
   plugins: [
     new HtmlWebPackPlugin({
       template: './src/index.html',
+    }),
+    new webpack.EnvironmentPlugin({
+      'LOCAL_URL': JSON.stringify(process.env.LOCAL_URL),
     }),
   ],
 };

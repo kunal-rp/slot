@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 const Task = (props) => {
 
   return (
-  		<div>id : {props.task.getStartTimestamp()}</div>
+  		<div>id - {props.task.getStartTimestamp()}</div>
   );
 };
 

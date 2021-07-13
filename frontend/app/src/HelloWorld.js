@@ -1,24 +1,20 @@
 import React, {useState, useEffect} from 'react';
 import Button from '@material-ui/core/Button';
 import Task from './Task';
+import {getTaskServiceProto, getTaskServiceClient} from './protoHelper';
 
+const taskServiceProto = getTaskServiceProto()
 
-console.log("start")
-const taskServiceProto = require('./proto/task/task_service_grpc_web_pb.js')
-console.log(taskServiceProto)
-
-var client = new taskServiceProto.TaskServiceClient("http://slot.appp/gapi"); 
+var client = getTaskServiceClient(); 
 
 function getRand(min, max) {
   return Math.trunc(Math.random() * (max - min) + min);
 }
 
-
 const HelloWorld = () => {
 
 	const [taskList, setTaskList] = useState([]);
 
-	
 	useEffect(() => {
 
 	});
