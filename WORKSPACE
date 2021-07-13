@@ -1,8 +1,9 @@
-workspace(name = "demo_proto_and_java" ,
+workspace(name = "slot" ,
     # Map the @npm bazel workspace to the node_modules directory.
     # This lets Bazel use the same node_modules as other local tooling.
     managed_directories = {
-        "@nodejs_modules": ["node_modules"],
+        "@nodejs_modules": ["nodejs/node_modules"],
+        "@frapp_modules": ["frontend/app/node_modules"]
         })
 
 # functions to get external libs
@@ -31,10 +32,6 @@ http_archive(
 load("@rules_proto_grpc//:repositories.bzl", "rules_proto_grpc_toolchains", "rules_proto_grpc_repos")
 rules_proto_grpc_toolchains()
 rules_proto_grpc_repos()
-
-load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
-rules_proto_dependencies()
-rules_proto_toolchains()
 
 load("@rules_proto_grpc//java:repositories.bzl", rules_proto_grpc_java_repos="java_repos")
 rules_proto_grpc_java_repos()
@@ -91,9 +88,9 @@ maven_install(
 ## rules_docker
 http_archive(
     name = "io_bazel_rules_docker",
-    sha256 = "1698624e878b0607052ae6131aa216d45ebb63871ec497f26c67455b34119c80",
-    strip_prefix = "rules_docker-0.15.0",
-    urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.15.0/rules_docker-v0.15.0.tar.gz"],
+    sha256 = "59d5b42ac315e7eadffa944e86e90c2990110a1c8075f1cd145f487e999d22b3",
+    strip_prefix = "rules_docker-0.17.0",
+    urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.17.0/rules_docker-v0.17.0.tar.gz"],
 )
 load(
     "@io_bazel_rules_docker//repositories:repositories.bzl",
@@ -130,6 +127,13 @@ docker_toolchain_configure(
 load("@rules_proto_grpc//js:repositories.bzl", rules_proto_grpc_js_repos="js_repos")
 rules_proto_grpc_js_repos()
 
+#installing nodejs rules 
+http_archive(
+    name = "build_bazel_rules_nodejs",
+    sha256 = "65067dcad93a61deb593be7d3d9a32a4577d09665536d8da536d731da5cd15e2",
+    urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/3.4.2/rules_nodejs-3.4.2.tar.gz"],
+)
+
 # The npm_install rule runs yarn anytime the package.json or package-lock.json file changes.
 # It also extracts any Bazel rules distributed in an npm package.
 load("@build_bazel_rules_nodejs//:index.bzl","yarn_install")
@@ -147,12 +151,37 @@ yarn_install(
     yarn_lock = "//npm:yarn.lock",
 )
 
+yarn_install(
+    name = "frapp_modules",
+    package_json = "//frontend/app:package.json",
+    yarn_lock = "//frontend/app:yarn.lock"
+)
+
 # Load nodejs_image rules to create java docker images to run grpc services
 load(
     "@io_bazel_rules_docker//nodejs:image.bzl",
     _nodejs_image_repos = "repositories",
 )
 _nodejs_image_repos()
+
+
+# nginx docker base image
+load("@io_bazel_rules_docker//container:pull.bzl", "container_pull")
+
+container_pull(
+    name = "nginx_base",
+    registry = "index.docker.io",
+    repository = "library/nginx",
+    tag = "1.21.0-alpine",
+)
+
+#envoy base image
+container_pull(
+    name = "envoy_base",
+    registry = "index.docker.io",
+    repository = "envoyproxy/envoy",
+    tag = "v1.18.3"
+)
 
 # k8s - push images directly to cluster 
 http_archive(
