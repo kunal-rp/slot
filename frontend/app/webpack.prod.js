@@ -42,6 +42,7 @@ module.exports = {
   plugins: [
     new HtmlWebPackPlugin({
       template: './frontend/app/src/index.html',
+      favicon: './frontend/app/assets/frappe.png'
     })
   ],
 };

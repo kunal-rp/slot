@@ -34,11 +34,7 @@ genrule(
 
 filegroup(
     name = "srcs",
-    srcs = [
-        "src/index.js",
-        "src/HelloWorld.js",
-        "src/Task.js",
-    ],
+    srcs = glob(["src/**"]) + glob(["assets/**"])
 )
 
 
